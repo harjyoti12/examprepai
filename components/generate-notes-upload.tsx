@@ -19,6 +19,7 @@ import {
   noteUploadSchema,
   type NoteUploadInput,
 } from '@/lib/validations/note'
+import { useRouter } from 'next/navigation'
 
 interface UploadedFile {
   id: string
@@ -27,6 +28,8 @@ interface UploadedFile {
   type: 'PDF' | 'JPG' | 'PNG'
   file: File
 }
+
+
 
 const FILE_STYLES: Record<string, { bg: string; color: string; icon: typeof FileText }> = {
   PDF: { bg: '#EDE8FF', color: '#7C3AED', icon: FileText },
@@ -147,7 +150,7 @@ export default function GenerateNotesUpload() {
   const [dragging, setDragging] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
-
+const router = useRouter();
   const {
     formState: { errors, isSubmitting },
     handleSubmit,
@@ -156,7 +159,7 @@ export default function GenerateNotesUpload() {
     setValue,
     trigger,
   } = useForm<NoteUploadInput>({
-    resolver: zodResolver(noteUploadSchema),
+    resolver: zodResolver(noteUploadSchema as any),
     defaultValues: {
       title: '',
       subject: '',
@@ -217,7 +220,7 @@ export default function GenerateNotesUpload() {
     })
 
     const result = await response.json()
-
+const noteId = result?.note?._id
     if (!response.ok) {
       setSubmitError(result.error || 'Upload failed. Please try again.')
       return
@@ -226,6 +229,7 @@ export default function GenerateNotesUpload() {
     reset()
     syncFiles([])
     setSubmitSuccess('Note uploaded successfully.')
+    router.push(`/dashboard/notes/${noteId}`)
   }
 
   const totalSize = files.reduce((total, file) => total + file.file.size, 0)

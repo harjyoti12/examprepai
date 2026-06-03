@@ -29,6 +29,26 @@ const noteSchema = new Schema({
     enum: ["pdf", "image"],
     required: true,
   },
+  processingStatus: {
+    type: String,
+    enum: ["uploaded", "extracting", "processing", "completed", "failed"],
+    default: "uploaded",
+  },
+  extractedContent: {
+    type: [
+      {
+        page: {
+          type: Number,
+          required: true,
+        },
+        text: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    default: [],
+  },
   qaCount: {
     type: Number,
     default: 0,

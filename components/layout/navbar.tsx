@@ -2,8 +2,11 @@
 
 import { Search, Upload, Bell, ChevronDown } from 'lucide-react'
 import Image from 'next/image'
+import { useUser, SignInButton, UserButton } from '@clerk/nextjs'
 
 export function Navbar() {
+  const { user, isLoaded } = useUser()
+
   return (
     <header className="navbar-container font-jakarta ">
       {/* Search Bar */}
@@ -40,41 +43,25 @@ export function Navbar() {
           />
         </button>
 
-        {/* Avatar + Name + Chevron */}
-        <button className="navbar-user-btn">
-          {/* Avatar */}
-          <div className="navbar-avatar navbar-avatar-border">
-            <Image
-              src="/avatar.png"
-              alt="Aryan Verma"
-              width={28}
-              height={28}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                const target = e.currentTarget
-                target.style.display = 'none'
-                const parent = target.parentElement!
-                parent.style.backgroundColor = '#7C3AED'
-                parent.style.display = 'flex'
-                parent.style.alignItems = 'center'
-                parent.style.justifyContent = 'center'
-                parent.innerHTML = `<span style="color:white;font-size:11px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif">AV</span>`
-              }}
-            />
-          </div>
-
-          {/* Name */}
-          <span className="navbar-user-name">
-            Aryan Verma
-          </span>
-
-          {/* Chevron */}
-          <ChevronDown
-            size={14}
-            strokeWidth={2}
-            className="navbar-chevron"
-          />
-        </button>
+        {/* Auth Section */}
+        {isLoaded && (
+          <>
+            {!user ? (
+              <SignInButton>
+                <button className="navbar-btn-generate navbar-btn-generate-bg h-9">
+                  <span className="text-[13.5px] font-semibold">Sign In</span>
+                </button>
+              </SignInButton>
+            ) : (
+              <div className="flex items-center gap-3">
+                <span className="navbar-user-name text-[13px]">
+                  {user.firstName || user.username || 'User'}
+                </span>
+                <UserButton />
+              </div>
+            )}
+          </>
+        )}
       </div>
     </header>
   )
