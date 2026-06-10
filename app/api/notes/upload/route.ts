@@ -9,6 +9,7 @@ import {
   noteUploadSchema,
 } from "@/lib/validations/note";
 import NoteModel from "@/models/note.model";
+import { processNote } from "@/lib/extraction/process-note";
 
 export const runtime = "nodejs";
 
@@ -42,6 +43,18 @@ export async function POST(request: Request) {
       fileUrls: urls,
       fileType: getUploadFileType(payload.files),
     });
+
+    // Automatically trigger extraction after upload
+    console.log(`Starting extraction for note ${note._id.toString()}`);
+    const processResult = await processNote(note._id.toString());
+
+    if (!processResult.success) {
+      console.error(`Extraction failed for note ${note._id.toString()}:`, processResult.error);
+      // Note: We still return success for the upload, but log the extraction failure
+      // The note will have processingStatus: "failed" in the database
+    } else {
+      console.log(`Extraction completed successfully for note ${note._id.toString()}`);
+    }
 
     return NextResponse.json({ note }, { status: 201 });
   } catch (error) {
