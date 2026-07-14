@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Toaster } from "sonner";
@@ -102,12 +103,11 @@ export const metadata: Metadata = {
     // creator: "@examprepai",
   },
 
-  // TODO: Add verification codes when available
-  // verification: {
-  //   google: "your-google-verification-code",
-  //   yandex: "your-yandex-verification-code",
-  //   // microsoft: "your-bing-verification-code",
-  // },
+  ...(process.env.GOOGLE_SITE_VERIFICATION && {
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION,
+    },
+  }),
 };
 
 export const viewport: Viewport = {
@@ -125,6 +125,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        {process.env.NODE_ENV === "production" &&
+          process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+          )}
         <JsonLd />
         <ClerkProvider
           afterSignInUrl="/dashboard"
