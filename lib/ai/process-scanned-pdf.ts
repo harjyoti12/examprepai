@@ -1,6 +1,6 @@
 import { connectToDatabase } from "../db";
 import NoteModel from "../../models/note.model";
-import { getGeminiModel } from "./gemini";
+import { generateWithFallback } from "./provider-manager";
 import { StudyMaterial } from "./generate-study-material";
 import { SchemaType, type ResponseSchema } from "@google/generative-ai";
 
@@ -153,46 +153,39 @@ export async function processScannedPdf(
     const pdfBuffer = await fetchPdfBuffer(pdfUrl);
     const pdfBase64 = pdfBuffer.toString("base64");
     
-    const model = getGeminiModel({
-      maxOutputTokens: 8192,
-      responseSchema: STUDY_MATERIAL_RESPONSE_SCHEMA,
-    });
     const prompt = SCANNED_PROMPT(note.title, note.subject);
 
-    console.log(`Processing scanned PDF for note ${noteId}: ${note.title} (${note.subject})`);
-
-    const response = await model.generateContent({
-      contents: [
-        {
-          role: "user",
-          parts: [
-            { text: prompt },
-            {
-              inlineData: {
-                mimeType: "application/pdf",
-                data: pdfBase64,
+    const response = await generateWithFallback(
+      {
+        maxOutputTokens: 8192,
+        responseSchema: STUDY_MATERIAL_RESPONSE_SCHEMA,
+      },
+      {
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: prompt },
+              {
+                inlineData: {
+                  mimeType: "application/pdf",
+                  data: pdfBase64,
+                },
               },
-            },
-          ],
-        },
-      ],
-    });
+            ],
+          },
+        ],
+      },
+    );
 
     const rawOutput = response.response.text();
-    console.log(`Raw Gemini response length: ${rawOutput.length} chars`);
-    console.log(`Raw response preview: ${rawOutput.slice(0, 500)}`);
 
     const jsonCandidate = extractJsonPayload(rawOutput);
     const result = parseStudyMaterial(jsonCandidate);
 
     note.extractedContent = [];
     note.generatedContent = result;
-    note.processingStatus = "completed";
     await note.save();
-
-    console.log(
-      `Scanned PDF processed for note ${noteId}: ${result.importantQuestions.length} questions, ${result.quickRevision.length} revision items`
-    );
 
     return {
       success: true,

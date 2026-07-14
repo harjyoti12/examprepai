@@ -7,10 +7,12 @@ import {
   Download,
   Layers3,
   Lightbulb,
+  Lock,
   NotebookTabs,
   Share2,
   Zap,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +21,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { StudyMaterial } from "@/lib/ai/generate-study-material";
 
@@ -30,6 +41,8 @@ interface NoteStudyTabsProps {
   revisionPoints: string[];
   subject: string;
   title: string;
+  canShare: boolean;
+  canExportPdf: boolean;
 }
 
 export function NoteStudyTabs({
@@ -38,21 +51,160 @@ export function NoteStudyTabs({
   revisionPoints,
   subject,
   title,
+  canShare,
+  canExportPdf,
 }: NoteStudyTabsProps) {
   const [activeTab, setActiveTab] = useState("questions");
   const [visibleQuestions, setVisibleQuestions] = useState(ITEMS_PER_PAGE);
   const [visibleRevision, setVisibleRevision] = useState(ITEMS_PER_PAGE);
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState<string | null>(null);
 
   const shownQuestions = importantQuestions.slice(0, visibleQuestions);
   const shownRevision = quickRevision.slice(0, visibleRevision);
   const canLoadMoreQuestions = visibleQuestions < importantQuestions.length;
   const canLoadMoreRevision = visibleRevision < quickRevision.length;
 
-  const handleDownloadPdf = () => {
-    window.print();
+  const requirePro = async (feature: "share" | "export-pdf"): Promise<boolean> => {
+    try {
+      const res = await fetch(`/api/validate-pro-feature?feature=${feature}`);
+      if (!res.ok) {
+        toast.error("Pro Feature", {
+          description: "Upgrade to Pro to unlock sharing and PDF export.",
+        });
+        return false;
+      }
+      return true;
+    } catch {
+      toast.error("Pro Feature", {
+        description: "Upgrade to Pro to unlock sharing and PDF export.",
+      });
+      return false;
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!canExportPdf) {
+      setShowUpgradeDialog("export-pdf");
+      return;
+    }
+
+    if (!(await requirePro("export-pdf"))) return;
+
+    const { default: jsPDF } = await import("jspdf");
+
+    const doc = new jsPDF();
+    const pw = doc.internal.pageSize.getWidth();
+    const ph = doc.internal.pageSize.getHeight();
+    const m = 20;
+    const cw = pw - m * 2;
+    let y = m;
+    let pageNum = 1;
+
+    const np = (h: number) => {
+      if (y + h > ph - m) {
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text(`Page ${pageNum}`, pw / 2, ph - 8, { align: "center" });
+        doc.addPage();
+        pageNum++;
+        y = m;
+      }
+    };
+
+    const section = (title: string) => {
+      np(14);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.setTextColor(0);
+      doc.text(title, m, y);
+      y += 10;
+      doc.setDrawColor(80, 50, 180);
+      doc.setLineWidth(0.8);
+      doc.line(m, y, m + cw, y);
+      y += 8;
+    };
+
+    const body = (text: string, indent = 0) => {
+      const lines = doc.splitTextToSize(text, cw - indent) as string[];
+      lines.forEach((l) => {
+        np(5);
+        doc.text(l, m + indent, y);
+        y += 5;
+      });
+    };
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    np(24);
+    doc.setTextColor(40, 30, 100);
+    doc.text(title, m, y);
+    y += 12;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Subject: ${subject}`, m, y);
+    y += 6;
+    doc.text(`Date: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, m, y);
+    y += 6;
+    doc.text(`Questions: ${importantQuestions.length}  |  Revision Topics: ${quickRevision.length}  |  Key Points: ${revisionPoints.length}`, m, y);
+    y += 14;
+
+    if (importantQuestions.length > 0) {
+      section("Important Questions");
+      importantQuestions.forEach((q, i) => {
+        np(30);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11.5);
+        doc.setTextColor(50, 30, 100);
+        doc.text(`Q${i + 1}. ${q.question}`, m, y);
+        y += 7;
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(60);
+        body(q.answer, 4);
+        y += 5;
+      });
+    }
+
+    if (quickRevision.length > 0) {
+      section("Quick Revision");
+      quickRevision.forEach((r) => {
+        np(20);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11.5);
+        doc.setTextColor(50, 30, 100);
+        doc.text(r.heading, m, y);
+        y += 7;
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(60);
+        r.points.forEach((p) => body(`- ${p}`, 4));
+        y += 3;
+      });
+    }
+
+    if (revisionPoints.length > 0) {
+      section("Key Revision Points");
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(60);
+      revisionPoints.forEach((p) => body(`- ${p}`));
+    }
+
+    doc.setFontSize(8);
+    doc.setTextColor(150);
+    doc.text(`Page ${pageNum}`, pw / 2, ph - 8, { align: "center" });
+    doc.save(`${title.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_]/g, "")}.pdf`);
   };
 
   const handleShare = async () => {
+    if (!canShare) {
+      setShowUpgradeDialog("share");
+      return;
+    }
+
+    if (!(await requirePro("share"))) return;
+
     const shareData = {
       title,
       text: `${title} - ${subject}`,
@@ -86,19 +238,29 @@ export function NoteStudyTabs({
             <Button
               type="button"
               variant="outline"
-              className="h-10 rounded-lg border-violet-200 bg-white px-4 text-[13px] font-extrabold text-violet-700 hover:border-violet-300 hover:bg-violet-50"
+              disabled={!canExportPdf}
+              className={`
+                h-10 rounded-lg border-violet-200 bg-white px-4 text-[13px] font-extrabold text-violet-700
+                ${!canExportPdf ? "cursor-not-allowed opacity-50" : "hover:border-violet-300 hover:bg-violet-50"}
+              `}
               onClick={handleDownloadPdf}
+              title={!canExportPdf ? "Upgrade to Pro to unlock this feature." : undefined}
             >
-              <Download className="h-4 w-4" />
+              {!canExportPdf ? <Lock className="h-4 w-4" /> : <Download className="h-4 w-4" />}
               Download PDF
             </Button>
             <Button
               type="button"
               variant="outline"
-              className="h-10 rounded-lg border-violet-200 bg-white px-4 text-[13px] font-extrabold text-violet-700 hover:border-violet-300 hover:bg-violet-50"
+              disabled={!canShare}
+              className={`
+                h-10 rounded-lg border-violet-200 bg-white px-4 text-[13px] font-extrabold text-violet-700
+                ${!canShare ? "cursor-not-allowed opacity-50" : "hover:border-violet-300 hover:bg-violet-50"}
+              `}
               onClick={handleShare}
+              title={!canShare ? "Upgrade to Pro to unlock this feature." : undefined}
             >
-              <Share2 className="h-4 w-4" />
+              {!canShare ? <Lock className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
               Share
             </Button>
           </div>
@@ -262,6 +424,32 @@ export function NoteStudyTabs({
           )}
         </TabsContent>
       </Tabs>
+
+      <AlertDialog open={showUpgradeDialog !== null} onOpenChange={(open) => { if (!open) setShowUpgradeDialog(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Unlock Pro Features</AlertDialogTitle>
+            <AlertDialogDescription>
+              Sharing and PDF export are available only for Pro members.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowUpgradeDialog(null)}>
+              Cancel
+            </AlertDialogCancel>
+            <Button
+              type="button"
+              className="rounded-lg bg-violet-600 px-5 text-[13px] font-extrabold text-white hover:bg-violet-700"
+              onClick={() => {
+                setShowUpgradeDialog(null);
+                window.location.href = "/dashboard/pricing";
+              }}
+            >
+              Upgrade to Pro
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }

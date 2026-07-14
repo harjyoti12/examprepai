@@ -6,11 +6,26 @@ import { generateStudyMaterial } from "../ai/generate-study-material";
 import { createNoteChunksFromPages } from "../ai/chunk-content";
 import { processScannedPdf } from "../ai/process-scanned-pdf";
 import { processImages } from "../ai/process-images";
+import { getUserSubscription } from "@/lib/business/get-user-subscription";
+import { getUserPlan } from "@/lib/business/get-user-plan";
+import { validateUpload } from "@/lib/business/validate-upload";
+import { calculateRequiredCredits } from "@/lib/business/calculate-required-credits";
+import { consumeCredits } from "@/lib/business/consume-credits";
+
+const PROCESSING_TIMEOUT_MS = 240_000; // 4 minutes — algorithm constant, kept local
 
 interface ProcessingResult {
   success: boolean;
   message: string;
   error?: string;
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  let timer: NodeJS.Timeout;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer!));
 }
 
 /**
@@ -33,6 +48,9 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
       };
     }
 
+    const subscription = await getUserSubscription();
+    const userPlan = await getUserPlan(note.userId);
+
     // Update status to "extracting"
     note.processingStatus = "extracting";
     await note.save();
@@ -41,9 +59,13 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
 
     // Detect file type and run appropriate extraction
     if (note.fileType === "pdf") {
-      // Extract from PDF
+      // Extract from PDF with timeout
       const pdfUrl = note.fileUrls[0]; // Should only have one PDF
-      extractedContent = await extractPDFText(pdfUrl);
+      extractedContent = await withTimeout(
+        extractPDFText(pdfUrl),
+        PROCESSING_TIMEOUT_MS,
+        "PDF extraction",
+      );
 
       const isScannedPdf =
         extractedContent.length === 0 ||
@@ -58,8 +80,29 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
 
         console.log(`Detected scanned PDF for note ${noteId}, using Gemini Vision fallback.`);
 
+        const scanCreditCheck = validateUpload({
+          subscription,
+          userPlan,
+          fileType: "pdf",
+          chunkCount: 1,
+        });
+
+        if (!scanCreditCheck.success) {
+          note.failureReason = scanCreditCheck.errors[0].code;
+          note.processingStatus = "failed";
+          await note.save();
+          return {
+            success: false,
+            message: scanCreditCheck.errors[0].message,
+            error: scanCreditCheck.errors[0].message,
+          };
+        }
+
         const scanResult = await processScannedPdf(noteId, pdfUrl);
         if (!scanResult.success) {
+          note.failureReason = "GENERATION_FAILED";
+          note.processingStatus = "failed";
+          await note.save();
           return {
             success: false,
             message: "Scanned PDF fallback failed.",
@@ -67,19 +110,69 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
           };
         }
 
+        const scannedCredits = calculateRequiredCredits({
+          fileType: "pdf",
+          pageCount: extractedContent.length,
+        });
+
+        let scannedRemaining: number | undefined;
+        try {
+          const consumption = await consumeCredits({
+            clerkUserId: note.userId,
+            credits: scannedCredits,
+            noteId: note._id.toString(),
+          });
+          scannedRemaining = consumption.remainingCredits;
+          await NoteModel.updateOne(
+            { _id: note._id },
+            { $set: { processingStatus: "completed", creditsUsed: scannedCredits } },
+          );
+        } catch (creditError) {
+          console.error(`Failed to consume credits for scanned PDF ${noteId}:`, creditError);
+          await NoteModel.updateOne(
+            { _id: note._id },
+            { $set: { failureReason: "INSUFFICIENT_CREDITS" } },
+          );
+          throw creditError;
+        }
+
         return {
           success: true,
-          message: "Successfully processed scanned PDF and generated study material.",
+          message: scannedRemaining !== undefined
+            ? `Study material generated successfully. ${scannedCredits} credits used • ${scannedRemaining} credits remaining.`
+            : "Successfully processed scanned PDF and generated study material.",
         };
       }
     } else if (note.fileType === "image") {
+      note.totalPages = note.fileUrls.length;
       note.processingStatus = "processing";
       await note.save();
 
       console.log(`Detected image note for ${noteId}, starting Gemini Vision image generation.`);
 
+      const imageCreditCheck = validateUpload({
+        subscription,
+        userPlan,
+        fileType: "image",
+        imageCount: note.fileUrls.length,
+      });
+
+      if (!imageCreditCheck.success) {
+        note.failureReason = imageCreditCheck.errors[0].code;
+        note.processingStatus = "failed";
+        await note.save();
+        return {
+          success: false,
+          message: imageCreditCheck.errors[0].message,
+          error: imageCreditCheck.errors[0].message,
+        };
+      }
+
       const imageResult = await processImages(noteId);
       if (!imageResult.success) {
+        note.failureReason = "GENERATION_FAILED";
+        note.processingStatus = "failed";
+        await note.save();
         return {
           success: false,
           message: "Image AI generation failed.",
@@ -87,29 +180,43 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
         };
       }
 
+      const imageCredits = calculateRequiredCredits({
+        fileType: "image",
+        imageCount: note.fileUrls.length,
+      });
+
+      let imageRemaining: number | undefined;
+      try {
+        const consumption = await consumeCredits({
+          clerkUserId: note.userId,
+          credits: imageCredits,
+          noteId: note._id.toString(),
+        });
+        imageRemaining = consumption.remainingCredits;
+        await NoteModel.updateOne(
+          { _id: note._id },
+          { $set: { processingStatus: "completed", creditsUsed: imageCredits } },
+        );
+      } catch (creditError) {
+        console.error(`Failed to consume credits for images ${noteId}:`, creditError);
+        await NoteModel.updateOne(
+          { _id: note._id },
+          { $set: { failureReason: "INSUFFICIENT_CREDITS" } },
+        );
+        throw creditError;
+      }
+
       return {
         success: true,
-        message: "Successfully processed image note and generated study material.",
+        message: imageRemaining !== undefined
+          ? `Study material generated successfully. ${imageCredits} credits used • ${imageRemaining} credits remaining.`
+          : "Successfully processed image note and generated study material.",
       };
     } else {
       throw new Error(`Unsupported file type: ${note.fileType}`);
     }
 
     const noteChunks = createNoteChunksFromPages(extractedContent);
-
-    console.log("NoteChunk model name:", NoteChunkModel.modelName);
-    console.log("NoteChunk collection name:", NoteChunkModel.collection.name);
-    console.log("Note ID:", note._id.toString());
-    console.log("Extracted pages:", extractedContent.length);
-    console.log(
-      "Extracted page text lengths:",
-      extractedContent.map((page) => ({
-        page: page.page,
-        textLength: page.text.length,
-      })),
-    );
-    console.log("Generated chunks:", noteChunks.length);
-    console.log("First chunk:", noteChunks[0]);
 
     if (noteChunks.length === 0) {
       throw new Error("No PDF chunks could be created from extracted content.");
@@ -120,26 +227,17 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
       ...chunk,
     }));
 
-    console.log("Chunk docs:", chunksWithNoteId.length);
-    console.log("First chunk with noteId:", chunksWithNoteId[0]);
-
     // Chunks are stored separately so large PDFs do not depend on Note.extractedContent for AI.
     try {
-      const deleteResult = await NoteChunkModel.deleteMany({
-        noteId: note._id,
-      });
-      console.log("Existing chunk delete count:", deleteResult.deletedCount);
-
-      console.log("Saving chunks...");
-      const insertedChunks = await NoteChunkModel.insertMany(chunksWithNoteId);
-      console.log("Inserted chunks:", insertedChunks.length);
-      console.log("First inserted chunk:", insertedChunks[0]);
-
-      const savedChunks = await NoteChunkModel.find({
+      await NoteChunkModel.deleteMany({
         noteId: note._id,
       });
 
-      console.log("Saved chunks in database:", savedChunks.length);
+      await NoteChunkModel.insertMany(chunksWithNoteId);
+
+      await NoteChunkModel.find({
+        noteId: note._id,
+      });
     } catch (chunkInsertError) {
       console.error("NoteChunk insertion failed:", chunkInsertError);
       throw chunkInsertError;
@@ -152,10 +250,29 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
     note.processingStatus = "processing";
     await note.save();
 
-    console.log(`Extraction completed for note ${noteId}, starting AI generation`);
+    const textCreditCheck = validateUpload({
+      subscription,
+      userPlan,
+      fileType: "pdf",
+      chunkCount: noteChunks.length,
+    });
+
+    if (!textCreditCheck.success) {
+      note.failureReason = textCreditCheck.errors[0].code;
+      note.processingStatus = "failed";
+      await note.save();
+      return {
+        success: false,
+        message: textCreditCheck.errors[0].message,
+        error: textCreditCheck.errors[0].message,
+      };
+    }
 
     const aiResult = await generateStudyMaterial(noteId);
     if (!aiResult.success) {
+      note.failureReason = "GENERATION_FAILED";
+      note.processingStatus = "failed";
+      await note.save();
       return {
         success: false,
         message: "Extraction completed, but AI generation failed.",
@@ -163,9 +280,37 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
       };
     }
 
+    const textCredits = calculateRequiredCredits({
+      fileType: "pdf",
+      chunkCount: noteChunks.length,
+    });
+
+    let textRemaining: number | undefined;
+    try {
+      const consumption = await consumeCredits({
+        clerkUserId: note.userId,
+        credits: textCredits,
+        noteId: note._id.toString(),
+      });
+      textRemaining = consumption.remainingCredits;
+      await NoteModel.updateOne(
+        { _id: note._id },
+        { $set: { processingStatus: "completed", creditsUsed: textCredits } },
+      );
+    } catch (creditError) {
+      console.error(`Failed to consume credits for text PDF ${noteId}:`, creditError);
+      await NoteModel.updateOne(
+        { _id: note._id },
+        { $set: { failureReason: "INSUFFICIENT_CREDITS" } },
+      );
+      throw creditError;
+    }
+
     return {
       success: true,
-      message: "Successfully extracted content and generated study material.",
+      message: textRemaining !== undefined
+        ? `Study material generated successfully. ${textCredits} credits used • ${textRemaining} credits remaining.`
+        : "Successfully extracted content and generated study material.",
     };
   } catch (error) {
     console.error(`Error processing note ${noteId}:`, error);
@@ -175,6 +320,9 @@ export async function processNote(noteId: string): Promise<ProcessingResult> {
       await connectToDatabase();
       const note = await NoteModel.findById(noteId);
       if (note) {
+        if (!note.failureReason) {
+          note.failureReason = "UNKNOWN_ERROR";
+        }
         note.processingStatus = "failed";
         await note.save();
       }
