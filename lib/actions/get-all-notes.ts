@@ -34,7 +34,7 @@ type LeanAllNote = {
   generatedContent?: StudyMaterial;
 };
 
-function escapeRegex(value: string) {
+export function escapeRegex(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
@@ -70,16 +70,17 @@ export async function getAllNotes({
   await connectToDatabase();
 
   const trimmedSearch = search.trim();
+  const baseFilter = { userId, processingStatus: { $ne: "failed" } };
   const query =
     trimmedSearch.length > 0
       ? {
-          userId,
+          ...baseFilter,
           $or: [
             { title: { $regex: escapeRegex(trimmedSearch), $options: "i" } },
             { subject: { $regex: escapeRegex(trimmedSearch), $options: "i" } },
           ],
         }
-      : { userId };
+      : baseFilter;
 
   const totalItems = await NoteModel.countDocuments(query);
   const totalPages = Math.ceil(totalItems / safeLimit);

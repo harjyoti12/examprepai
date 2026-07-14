@@ -1,0 +1,2180 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "examprepai",
+    "languages": [
+      "typescript",
+      "javascript",
+      "css",
+      "markdown",
+      "json"
+    ],
+    "frameworks": [
+      "nextjs",
+      "react",
+      "tailwindcss",
+      "shadcn",
+      "mongoose",
+      "mongodb"
+    ],
+    "description": "Next.js AI-powered exam preparation application",
+    "analyzedAt": "2026-06-18T00:00:00.000Z",
+    "gitCommitHash": "d0b5d2bb0578eea6076004313d1fe594192b9ed2"
+  },
+  "nodes": [
+    {
+      "id": "config:.env",
+      "type": "config",
+      "name": ".env",
+      "summary": "Environment variables configuration file",
+      "tags": [
+        "config",
+        "environment"
+      ],
+      "filePath": ".env",
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:AGENTS.md",
+      "type": "document",
+      "name": "AGENTS.md",
+      "summary": "Agent instruction rules for Next.js project conventions",
+      "tags": [
+        "docs",
+        "guidelines"
+      ],
+      "filePath": "AGENTS.md",
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "summary": "Minimal Claude code assistant reference",
+      "tags": [
+        "docs"
+      ],
+      "filePath": "CLAUDE.md",
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:components.json",
+      "type": "config",
+      "name": "components.json",
+      "summary": "shadcn/ui component library configuration",
+      "tags": [
+        "config",
+        "shadcn"
+      ],
+      "filePath": "components.json",
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:eslint.config.mjs",
+      "type": "config",
+      "name": "eslint.config.mjs",
+      "summary": "ESLint configuration with Next.js core web vitals and TypeScript rules",
+      "tags": [
+        "config",
+        "linting"
+      ],
+      "filePath": "eslint.config.mjs",
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:next.config.ts",
+      "type": "config",
+      "name": "next.config.ts",
+      "summary": "Next.js configuration with 40MB proxy body size limit",
+      "tags": [
+        "config",
+        "nextjs"
+      ],
+      "filePath": "next.config.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "summary": "Project manifest with dependencies including Next.js, React, Clerk, MongoDB, Gemini AI",
+      "tags": [
+        "config",
+        "dependencies"
+      ],
+      "filePath": "package.json",
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:pnpm-workspace.yaml",
+      "type": "config",
+      "name": "pnpm-workspace.yaml",
+      "summary": "pnpm workspace configuration",
+      "tags": [
+        "config",
+        "workspace"
+      ],
+      "filePath": "pnpm-workspace.yaml",
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:postcss.config.mjs",
+      "type": "config",
+      "name": "postcss.config.mjs",
+      "summary": "PostCSS configuration with Tailwind CSS plugin",
+      "tags": [
+        "config",
+        "postcss"
+      ],
+      "filePath": "postcss.config.mjs",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:proxy.ts",
+      "type": "file",
+      "name": "proxy.ts",
+      "summary": "Clerk middleware proxy for route protection and authentication",
+      "tags": [
+        "middleware",
+        "auth"
+      ],
+      "filePath": "proxy.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:proxy.ts:clerkMiddleware",
+      "type": "function",
+      "name": "clerkMiddleware",
+      "summary": "Default Clerk auth middleware guarding all routes except static assets",
+      "tags": [
+        "middleware"
+      ],
+      "filePath": "proxy.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "summary": "Project README with Next.js setup instructions and deployment guide",
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "filePath": "README.md",
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "summary": "TypeScript compiler configuration for the Next.js project",
+      "tags": [
+        "config",
+        "typescript"
+      ],
+      "filePath": "tsconfig.json",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "summary": "Root layout with Clerk auth, QueryProvider, and global navigation",
+      "tags": [
+        "layout",
+        "app"
+      ],
+      "filePath": "app/layout.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/layout.tsx:RootLayout",
+      "type": "function",
+      "name": "RootLayout",
+      "summary": "Renders the root HTML structure with authentication and query providers",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/layout.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "summary": "Landing page with Next.js template content and navigation links",
+      "tags": [
+        "page"
+      ],
+      "filePath": "app/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/page.tsx:Home",
+      "type": "function",
+      "name": "Home",
+      "summary": "Renders the default Next.js welcome page with branding and documentation links",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "endpoint:app/api/notes/upload/route.ts:POST",
+      "type": "endpoint",
+      "name": "POST /api/notes/upload",
+      "summary": "Creates a new note with file upload triggering background extraction",
+      "tags": [
+        "api",
+        "notes"
+      ],
+      "filePath": "app/api/notes/upload/route.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "endpoint:app/api/notes/route.ts:GET",
+      "type": "endpoint",
+      "name": "GET /api/notes",
+      "summary": "Lists all notes for the authenticated user with search and pagination",
+      "tags": [
+        "api",
+        "notes"
+      ],
+      "filePath": "app/api/notes/route.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "endpoint:app/api/notes/[id]/questions/route.ts:GET",
+      "type": "endpoint",
+      "name": "GET /api/notes/:id/questions",
+      "summary": "Fetches paginated important questions for a specific note",
+      "tags": [
+        "api",
+        "questions"
+      ],
+      "filePath": "app/api/notes/[id]/questions/route.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "endpoint:app/api/notes/[id]/revision/route.ts:GET",
+      "type": "endpoint",
+      "name": "GET /api/notes/:id/revision",
+      "summary": "Fetches paginated quick revision items for a specific note",
+      "tags": [
+        "api",
+        "revision"
+      ],
+      "filePath": "app/api/notes/[id]/revision/route.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "endpoint:app/api/notes/[id]/status/route.ts:GET",
+      "type": "endpoint",
+      "name": "GET /api/notes/:id/status",
+      "summary": "Polls processing status of a note (currently commented out)",
+      "tags": [
+        "api",
+        "status"
+      ],
+      "filePath": "app/api/notes/[id]/status/route.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "endpoint:app/api/search/route.ts:GET",
+      "type": "endpoint",
+      "name": "GET /api/search",
+      "summary": "Searches notes by title and subject for the authenticated user",
+      "tags": [
+        "api",
+        "search"
+      ],
+      "filePath": "app/api/search/route.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/dashboard/layout.tsx",
+      "type": "file",
+      "name": "dashboard/layout.tsx",
+      "summary": "Dashboard layout with sidebar and navbar",
+      "tags": [
+        "layout",
+        "dashboard"
+      ],
+      "filePath": "app/dashboard/layout.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/layout.tsx:DashboardLayout",
+      "type": "function",
+      "name": "DashboardLayout",
+      "summary": "Renders the dashboard shell with sidebar, navbar, and content area",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/dashboard/layout.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/dashboard/page.tsx",
+      "type": "file",
+      "name": "dashboard/page.tsx",
+      "summary": "Dashboard home page with notes overview table and search",
+      "tags": [
+        "page",
+        "dashboard"
+      ],
+      "filePath": "app/dashboard/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/page.tsx:DashboardPage",
+      "type": "function",
+      "name": "DashboardPage",
+      "summary": "Renders the dashboard home with recent notes, search, and quick actions",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/dashboard/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/page.tsx:formatDate",
+      "type": "function",
+      "name": "formatDate",
+      "summary": "Formats date string to US locale format",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "app/dashboard/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/page.tsx:getFileTypeLabel",
+      "type": "function",
+      "name": "getFileTypeLabel",
+      "summary": "Extracts file type label from note title or fileType",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "app/dashboard/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/page.tsx:getFileTypeColor",
+      "type": "function",
+      "name": "getFileTypeColor",
+      "summary": "Returns color classes for file type badges",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "app/dashboard/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/page.tsx:getQuestionCount",
+      "type": "function",
+      "name": "getQuestionCount",
+      "summary": "Counts the number of generated questions for a note",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "app/dashboard/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/dashboard/generate/page.tsx",
+      "type": "file",
+      "name": "dashboard/generate/page.tsx",
+      "summary": "Generate notes page with file upload component",
+      "tags": [
+        "page",
+        "dashboard"
+      ],
+      "filePath": "app/dashboard/generate/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/generate/page.tsx:GenerateNotesPage",
+      "type": "function",
+      "name": "GenerateNotesPage",
+      "summary": "Renders the notes upload form for generating study materials",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/dashboard/generate/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/dashboard/notes/page.tsx",
+      "type": "file",
+      "name": "dashboard/notes/page.tsx",
+      "summary": "Notes listing page with grid/list view, search, sort, and pagination",
+      "tags": [
+        "page",
+        "dashboard"
+      ],
+      "filePath": "app/dashboard/notes/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/notes/page.tsx:NotesPage",
+      "type": "function",
+      "name": "NotesPage",
+      "summary": "Renders the notes management page with filtering and pagination",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/dashboard/notes/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/dashboard/notes/[id]/loading.tsx",
+      "type": "file",
+      "name": "notes/[id]/loading.tsx",
+      "summary": "Loading skeleton for note details page",
+      "tags": [
+        "ui",
+        "loading"
+      ],
+      "filePath": "app/dashboard/notes/[id]/loading.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/notes/[id]/loading.tsx:NoteDetailsLoading",
+      "type": "function",
+      "name": "NoteDetailsLoading",
+      "summary": "Renders animated skeleton placeholder for note detail page",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/dashboard/notes/[id]/loading.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+      "type": "file",
+      "name": "notes/[id]/note-study-tabs.client.tsx",
+      "summary": "Client component for study material tabs with paginated questions and revision",
+      "tags": [
+        "component",
+        "study"
+      ],
+      "filePath": "app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/notes/[id]/note-study-tabs.client.tsx:NoteStudyTabs",
+      "type": "function",
+      "name": "NoteStudyTabs",
+      "summary": "Renders tabbed interface with important questions and quick revision content",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/dashboard/notes/[id]/note-study-tabs.tsx",
+      "type": "file",
+      "name": "notes/[id]/note-study-tabs.tsx",
+      "summary": "Client component for study material display with card-based layout",
+      "tags": [
+        "component",
+        "study"
+      ],
+      "filePath": "app/dashboard/notes/[id]/note-study-tabs.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/notes/[id]/note-study-tabs.tsx:NoteStudyTabs",
+      "type": "function",
+      "name": "NoteStudyTabs",
+      "summary": "Renders study material with important questions and quick revision cards",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/dashboard/notes/[id]/note-study-tabs.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/dashboard/notes/[id]/page.tsx",
+      "type": "file",
+      "name": "notes/[id]/page.tsx",
+      "summary": "Note details page with study material, metadata, and action buttons",
+      "tags": [
+        "page",
+        "dashboard"
+      ],
+      "filePath": "app/dashboard/notes/[id]/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/notes/[id]/page.tsx:NoteDetailsPage",
+      "type": "function",
+      "name": "NoteDetailsPage",
+      "summary": "Renders the full note detail view with study tabs and note information",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "app/dashboard/notes/[id]/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/notes/[id]/page.tsx:formatDate",
+      "type": "function",
+      "name": "formatDate",
+      "summary": "Formats date to US locale string",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "app/dashboard/notes/[id]/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/dashboard/notes/[id]/page.tsx:getRevisionPoints",
+      "type": "function",
+      "name": "getRevisionPoints",
+      "summary": "Extracts revision points from quick revision data",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "app/dashboard/notes/[id]/page.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/generate-notes-upload.tsx",
+      "type": "file",
+      "name": "generate-notes-upload.tsx",
+      "summary": "File upload form with drag-and-drop for PDF and image notes",
+      "tags": [
+        "component",
+        "upload"
+      ],
+      "filePath": "components/generate-notes-upload.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/generate-notes-upload.tsx:GenerateNotesUpload",
+      "type": "function",
+      "name": "GenerateNotesUpload",
+      "summary": "Handles file upload with form validation, progress tracking, and submission",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "components/generate-notes-upload.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/generate-notes-upload.tsx:formatFileSize",
+      "type": "function",
+      "name": "formatFileSize",
+      "summary": "Formats file size in KB/MB with proper unit",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "components/generate-notes-upload.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/generate-notes-upload.tsx:getDisplayType",
+      "type": "function",
+      "name": "getDisplayType",
+      "summary": "Maps MIME type to display file type (PDF, JPG, PNG)",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "components/generate-notes-upload.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/generate-notes-upload.tsx:toUploadedFile",
+      "type": "function",
+      "name": "toUploadedFile",
+      "summary": "Converts File object to UploadedFile with id and display info",
+      "tags": [
+        "helper"
+      ],
+      "filePath": "components/generate-notes-upload.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/upload-progress.tsx",
+      "type": "file",
+      "name": "upload-progress.tsx",
+      "summary": "Progress tracker for note processing with step-by-step status",
+      "tags": [
+        "component",
+        "upload"
+      ],
+      "filePath": "components/upload-progress.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/upload-progress.tsx:UploadProgress",
+      "type": "function",
+      "name": "UploadProgress",
+      "summary": "Renders a step-by-step progress indicator for note processing pipeline",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "components/upload-progress.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/layout/navbar.tsx",
+      "type": "file",
+      "name": "navbar.tsx",
+      "summary": "Main navigation bar with search and user authentication",
+      "tags": [
+        "component",
+        "ui",
+        "client"
+      ],
+      "filePath": "components/layout/navbar.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/layout/navbar.tsx:Navbar",
+      "type": "function",
+      "name": "Navbar",
+      "summary": "Renders the global search bar, user profile, and notifications",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "components/layout/navbar.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/layout/sidebar.tsx",
+      "type": "file",
+      "name": "sidebar.tsx",
+      "summary": "Side navigation menu with links and upgrade prompt",
+      "tags": [
+        "component",
+        "ui",
+        "client"
+      ],
+      "filePath": "components/layout/sidebar.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/layout/sidebar.tsx:Sidebar",
+      "type": "function",
+      "name": "Sidebar",
+      "summary": "Renders the dashboard navigation links and logo",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "components/layout/sidebar.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/providers/query-provider.tsx",
+      "type": "file",
+      "name": "query-provider.tsx",
+      "summary": "React Query client provider for the application",
+      "tags": [
+        "provider",
+        "client"
+      ],
+      "filePath": "components/providers/query-provider.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/providers/query-provider.tsx:QueryProvider",
+      "type": "function",
+      "name": "QueryProvider",
+      "summary": "Wraps children with TanStack Query context",
+      "tags": [
+        "react-component"
+      ],
+      "filePath": "components/providers/query-provider.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/button.tsx",
+      "type": "file",
+      "name": "button.tsx",
+      "summary": "Reusable button component with multiple variants",
+      "tags": [
+        "ui",
+        "component"
+      ],
+      "filePath": "components/ui/button.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/card.tsx",
+      "type": "file",
+      "name": "card.tsx",
+      "summary": "Card UI components for layout grouping",
+      "tags": [
+        "ui",
+        "component"
+      ],
+      "filePath": "components/ui/card.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/input.tsx",
+      "type": "file",
+      "name": "input.tsx",
+      "summary": "Customizable input field component",
+      "tags": [
+        "ui",
+        "component"
+      ],
+      "filePath": "components/ui/input.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/select.tsx",
+      "type": "file",
+      "name": "select.tsx",
+      "summary": "Custom select dropdown based on Radix UI",
+      "tags": [
+        "ui",
+        "component"
+      ],
+      "filePath": "components/ui/select.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/table.tsx",
+      "type": "file",
+      "name": "table.tsx",
+      "summary": "Data table components for lists",
+      "tags": [
+        "ui",
+        "component"
+      ],
+      "filePath": "components/ui/table.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/tabs.tsx",
+      "type": "file",
+      "name": "tabs.tsx",
+      "summary": "Tab navigation UI components",
+      "tags": [
+        "ui",
+        "component"
+      ],
+      "filePath": "components/ui/tabs.tsx",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:hooks/use-debounce.ts",
+      "type": "file",
+      "name": "use-debounce.ts",
+      "summary": "Hook to debounce a value change",
+      "tags": [
+        "hook"
+      ],
+      "filePath": "hooks/use-debounce.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:hooks/use-debounce.ts:useDebounce",
+      "type": "function",
+      "name": "useDebounce",
+      "summary": "Returns a value after a specified delay",
+      "tags": [
+        "logic"
+      ],
+      "filePath": "hooks/use-debounce.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:hooks/use-note-status.ts",
+      "type": "file",
+      "name": "use-note-status.ts",
+      "summary": "Hook to poll for note processing status",
+      "tags": [
+        "hook",
+        "client"
+      ],
+      "filePath": "hooks/use-note-status.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:hooks/use-note-status.ts:useNoteStatus",
+      "type": "function",
+      "name": "useNoteStatus",
+      "summary": "Handles polling and status updates for a specific note",
+      "tags": [
+        "react-query"
+      ],
+      "filePath": "hooks/use-note-status.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:hooks/use-notes.ts",
+      "type": "file",
+      "name": "use-notes.ts",
+      "summary": "Hook to fetch and manage multiple notes",
+      "tags": [
+        "hook",
+        "client"
+      ],
+      "filePath": "hooks/use-notes.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:hooks/use-notes.ts:useNotes",
+      "type": "function",
+      "name": "useNotes",
+      "summary": "Fetches paginated and filtered notes list",
+      "tags": [
+        "react-query"
+      ],
+      "filePath": "hooks/use-notes.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/blob-upload.ts",
+      "type": "file",
+      "name": "blob-upload.ts",
+      "summary": "Vercel Blob storage upload utilities",
+      "tags": [
+        "lib",
+        "storage"
+      ],
+      "filePath": "lib/blob-upload.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/blob-upload.ts:uploadFilesToBlob",
+      "type": "function",
+      "name": "uploadFilesToBlob",
+      "summary": "Uploads multiple files to Vercel Blob",
+      "tags": [
+        "async"
+      ],
+      "filePath": "lib/blob-upload.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/db.ts",
+      "type": "file",
+      "name": "db.ts",
+      "summary": "Mongoose database connection utility",
+      "tags": [
+        "lib",
+        "db"
+      ],
+      "filePath": "lib/db.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/db.ts:connectToDatabase",
+      "type": "function",
+      "name": "connectToDatabase",
+      "summary": "Manages a cached Mongoose connection",
+      "tags": [
+        "async"
+      ],
+      "filePath": "lib/db.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/utils.ts",
+      "type": "file",
+      "name": "utils.ts",
+      "summary": "General helper functions for styling and common logic",
+      "tags": [
+        "lib"
+      ],
+      "filePath": "lib/utils.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/utils.ts:cn",
+      "type": "function",
+      "name": "cn",
+      "summary": "Merges Tailwind CSS classes",
+      "tags": [
+        "style"
+      ],
+      "filePath": "lib/utils.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/actions/get-all-notes.ts",
+      "type": "file",
+      "name": "get-all-notes.ts",
+      "summary": "Server action to retrieve all notes for a user",
+      "tags": [
+        "action",
+        "server"
+      ],
+      "filePath": "lib/actions/get-all-notes.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/actions/get-all-notes.ts:getAllNotes",
+      "type": "function",
+      "name": "getAllNotes",
+      "summary": "Queries MongoDB for user notes with search and pagination",
+      "tags": [
+        "async",
+        "db"
+      ],
+      "filePath": "lib/actions/get-all-notes.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/actions/get-note-by-id.ts",
+      "type": "file",
+      "name": "get-note-by-id.ts",
+      "summary": "Server action to fetch a single note by ID",
+      "tags": [
+        "action",
+        "server"
+      ],
+      "filePath": "lib/actions/get-note-by-id.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/actions/get-note-by-id.ts:getNoteById",
+      "type": "function",
+      "name": "getNoteById",
+      "summary": "Fetches a specific note from MongoDB",
+      "tags": [
+        "async",
+        "db"
+      ],
+      "filePath": "lib/actions/get-note-by-id.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/actions/get-recent-notes.ts",
+      "type": "file",
+      "name": "get-recent-notes.ts",
+      "summary": "Server action to fetch recently created notes",
+      "tags": [
+        "action",
+        "server"
+      ],
+      "filePath": "lib/actions/get-recent-notes.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/actions/get-recent-notes.ts:getRecentNotes",
+      "type": "function",
+      "name": "getRecentNotes",
+      "summary": "Retrieves the 5 most recent notes",
+      "tags": [
+        "async",
+        "db"
+      ],
+      "filePath": "lib/actions/get-recent-notes.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/ai/chunk-content.ts",
+      "type": "file",
+      "name": "chunk-content.ts",
+      "summary": "Logic for splitting text into processable AI chunks",
+      "tags": [
+        "lib",
+        "ai"
+      ],
+      "filePath": "lib/ai/chunk-content.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/ai/chunk-content.ts:chunkExtractedContent",
+      "type": "function",
+      "name": "chunkExtractedContent",
+      "summary": "Splits page-based text into word-limited chunks",
+      "tags": [
+        "logic"
+      ],
+      "filePath": "lib/ai/chunk-content.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/ai/gemini.ts",
+      "type": "file",
+      "name": "gemini.ts",
+      "summary": "Google Gemini AI client configuration",
+      "tags": [
+        "lib",
+        "ai"
+      ],
+      "filePath": "lib/ai/gemini.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/ai/gemini.ts:getGeminiModel",
+      "type": "function",
+      "name": "getGeminiModel",
+      "summary": "Configures and returns a Gemini generative model instance",
+      "tags": [
+        "factory"
+      ],
+      "filePath": "lib/ai/gemini.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/ai/generate-study-material.ts",
+      "type": "file",
+      "name": "generate-study-material.ts",
+      "summary": "Core logic for generating study material using Gemini",
+      "tags": [
+        "lib",
+        "ai"
+      ],
+      "filePath": "lib/ai/generate-study-material.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/ai/generate-study-material.ts:generateStudyMaterial",
+      "type": "function",
+      "name": "generateStudyMaterial",
+      "summary": "Orchestrates AI generation for a note's chunks",
+      "tags": [
+        "async"
+      ],
+      "filePath": "lib/ai/generate-study-material.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/ai/process-images.ts",
+      "type": "file",
+      "name": "process-images.ts",
+      "summary": "Image-to-study-material processing using Gemini Vision",
+      "tags": [
+        "lib",
+        "ai"
+      ],
+      "filePath": "lib/ai/process-images.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/ai/process-images.ts:processImages",
+      "type": "function",
+      "name": "processImages",
+      "summary": "Processes image notes directly with Gemini Vision",
+      "tags": [
+        "async"
+      ],
+      "filePath": "lib/ai/process-images.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/ai/process-scanned-pdf.ts",
+      "type": "file",
+      "name": "process-scanned-pdf.ts",
+      "summary": "Scanned PDF processing using Gemini Vision",
+      "tags": [
+        "lib",
+        "ai"
+      ],
+      "filePath": "lib/ai/process-scanned-pdf.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/ai/process-scanned-pdf.ts:processScannedPdf",
+      "type": "function",
+      "name": "processScannedPdf",
+      "summary": "Handles PDFs without extractable text using Gemini Vision",
+      "tags": [
+        "async"
+      ],
+      "filePath": "lib/ai/process-scanned-pdf.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/api/notes.ts",
+      "type": "file",
+      "name": "notes.ts",
+      "summary": "Client-side API wrapper for notes operations",
+      "tags": [
+        "api",
+        "client"
+      ],
+      "filePath": "lib/api/notes.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/api/notes.ts:getNotes",
+      "type": "function",
+      "name": "getNotes",
+      "summary": "Client-side fetch for the notes API",
+      "tags": [
+        "async"
+      ],
+      "filePath": "lib/api/notes.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/extraction/extract-images.ts",
+      "type": "file",
+      "name": "extract-images.ts",
+      "summary": "Placeholder for image text extraction",
+      "tags": [
+        "lib",
+        "extraction"
+      ],
+      "filePath": "lib/extraction/extract-images.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/extraction/extract-pdf.ts",
+      "type": "file",
+      "name": "extract-pdf.ts",
+      "summary": "PDF text extraction using pdf-parse",
+      "tags": [
+        "lib",
+        "extraction"
+      ],
+      "filePath": "lib/extraction/extract-pdf.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/extraction/extract-pdf.ts:extractPDFText",
+      "type": "function",
+      "name": "extractPDFText",
+      "summary": "Extracts text page-by-page from a PDF URL",
+      "tags": [
+        "async"
+      ],
+      "filePath": "lib/extraction/extract-pdf.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/extraction/process-note.ts",
+      "type": "file",
+      "name": "process-note.ts",
+      "summary": "Orchestrates the entire note processing pipeline",
+      "tags": [
+        "lib",
+        "extraction"
+      ],
+      "filePath": "lib/extraction/process-note.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/extraction/process-note.ts:processNote",
+      "type": "function",
+      "name": "processNote",
+      "summary": "Handles extraction, chunking, and AI generation for a note",
+      "tags": [
+        "async"
+      ],
+      "filePath": "lib/extraction/process-note.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/validations/note.ts",
+      "type": "file",
+      "name": "note.ts",
+      "summary": "Zod schemas for note validation",
+      "tags": [
+        "lib",
+        "validation"
+      ],
+      "filePath": "lib/validations/note.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:models/note-chunk.model.ts",
+      "type": "file",
+      "name": "note-chunk.model.ts",
+      "summary": "Mongoose model for note content chunks",
+      "tags": [
+        "model",
+        "db"
+      ],
+      "filePath": "models/note-chunk.model.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:models/note.model.ts",
+      "type": "file",
+      "name": "note.model.ts",
+      "summary": "Mongoose model for study notes",
+      "tags": [
+        "model",
+        "db"
+      ],
+      "filePath": "models/note.model.ts",
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/api/notes/upload/route.ts",
+      "type": "file",
+      "name": "Notes Upload API Route",
+      "filePath": "app/api/notes/upload/route.ts",
+      "summary": "Handles note upload with file processing pipeline",
+      "tags": [
+        "api",
+        "notes",
+        "upload"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/api/notes/route.ts",
+      "type": "file",
+      "name": "Notes List API Route",
+      "filePath": "app/api/notes/route.ts",
+      "summary": "Handles note listing requests",
+      "tags": [
+        "api",
+        "notes"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:eslint.config.mjs",
+      "target": "config:next.config.ts",
+      "type": "related",
+      "weight": 0.5
+    },
+    {
+      "source": "config:components.json",
+      "target": "config:tsconfig.json",
+      "type": "configures",
+      "weight": 0.5
+    },
+    {
+      "source": "file:proxy.ts",
+      "target": "file:app/layout.tsx",
+      "type": "middleware",
+      "weight": 0.6
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:app/page.tsx",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:app/dashboard/layout.tsx",
+      "type": "routes",
+      "weight": 0.5
+    },
+    {
+      "source": "file:app/dashboard/layout.tsx",
+      "target": "file:app/dashboard/page.tsx",
+      "type": "contains",
+      "weight": 1
+    },
+    {
+      "source": "file:app/dashboard/layout.tsx",
+      "target": "file:app/dashboard/generate/page.tsx",
+      "type": "routes",
+      "weight": 0.5
+    },
+    {
+      "source": "file:app/dashboard/layout.tsx",
+      "target": "file:app/dashboard/notes/page.tsx",
+      "type": "routes",
+      "weight": 0.5
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:app/dashboard/notes/[id]/page.tsx",
+      "type": "routes",
+      "weight": 0.5
+    },
+    {
+      "source": "endpoint:app/api/notes/route.ts:GET",
+      "target": "file:lib/actions/get-all-notes.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/upload/route.ts:POST",
+      "target": "file:lib/blob-upload.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/upload/route.ts:POST",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/upload/route.ts:POST",
+      "target": "file:lib/validations/note.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/upload/route.ts:POST",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/upload/route.ts:POST",
+      "target": "file:lib/extraction/process-note.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/[id]/questions/route.ts:GET",
+      "target": "file:lib/actions/get-note-by-id.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/[id]/revision/route.ts:GET",
+      "target": "file:lib/actions/get-note-by-id.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/[id]/status/route.ts:GET",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/notes/[id]/status/route.ts:GET",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/search/route.ts:GET",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "endpoint:app/api/search/route.ts:GET",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/layout.tsx",
+      "target": "file:components/layout/sidebar.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/layout.tsx",
+      "target": "file:components/layout/navbar.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/page.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/page.tsx",
+      "target": "file:components/ui/input.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/page.tsx",
+      "target": "file:components/ui/table.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/page.tsx",
+      "target": "file:hooks/use-notes.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/page.tsx",
+      "target": "file:hooks/use-debounce.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/page.tsx",
+      "target": "file:lib/actions/get-all-notes.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/generate/page.tsx",
+      "target": "file:components/generate-notes-upload.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:components/ui/input.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:components/ui/select.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:components/ui/table.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:components/providers/query-provider.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:hooks/use-notes.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/page.tsx",
+      "target": "file:lib/actions/get-all-notes.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+      "target": "file:components/ui/card.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+      "target": "file:components/ui/tabs.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+      "target": "file:lib/ai/generate-study-material.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/note-study-tabs.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/note-study-tabs.tsx",
+      "target": "file:components/ui/card.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/note-study-tabs.tsx",
+      "target": "file:components/ui/tabs.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/note-study-tabs.tsx",
+      "target": "file:lib/ai/generate-study-material.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/page.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/page.tsx",
+      "target": "file:components/providers/query-provider.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/page.tsx",
+      "target": "file:app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/page.tsx",
+      "target": "file:lib/actions/get-note-by-id.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/dashboard/notes/[id]/page.tsx",
+      "target": "file:lib/ai/generate-study-material.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/generate-notes-upload.tsx",
+      "target": "file:components/ui/input.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/generate-notes-upload.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/generate-notes-upload.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/generate-notes-upload.tsx",
+      "target": "file:lib/validations/note.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/generate-notes-upload.tsx",
+      "target": "file:hooks/use-note-status.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/generate-notes-upload.tsx",
+      "target": "file:components/upload-progress.tsx",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/upload-progress.tsx",
+      "target": "file:hooks/use-note-status.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/layout/navbar.tsx",
+      "target": "file:hooks/use-debounce.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "function:components/layout/navbar.tsx:Navbar",
+      "target": "function:hooks/use-debounce.ts:useDebounce",
+      "type": "calls",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/layout/sidebar.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:components/ui/button.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:components/ui/card.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:components/ui/input.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:components/ui/select.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:components/ui/table.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:components/ui/tabs.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:hooks/use-note-status.ts",
+      "target": "file:lib/api/notes.ts",
+      "type": "imports",
+      "weight": 0.5
+    },
+    {
+      "source": "file:hooks/use-notes.ts",
+      "target": "file:lib/api/notes.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "function:hooks/use-notes.ts:useNotes",
+      "target": "function:lib/api/notes.ts:getNotes",
+      "type": "calls",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/actions/get-all-notes.ts",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/actions/get-all-notes.ts",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/actions/get-all-notes.ts",
+      "target": "file:lib/ai/generate-study-material.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "function:lib/actions/get-all-notes.ts:getAllNotes",
+      "target": "function:lib/db.ts:connectToDatabase",
+      "type": "calls",
+      "weight": 0.9
+    },
+    {
+      "source": "file:lib/actions/get-note-by-id.ts",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/actions/get-note-by-id.ts",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "function:lib/actions/get-note-by-id.ts:getNoteById",
+      "target": "function:lib/db.ts:connectToDatabase",
+      "type": "calls",
+      "weight": 0.9
+    },
+    {
+      "source": "file:lib/actions/get-recent-notes.ts",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/actions/get-recent-notes.ts",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/actions/get-recent-notes.ts",
+      "target": "file:lib/ai/generate-study-material.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "function:lib/actions/get-recent-notes.ts:getRecentNotes",
+      "target": "function:lib/db.ts:connectToDatabase",
+      "type": "calls",
+      "weight": 0.9
+    },
+    {
+      "source": "file:lib/ai/generate-study-material.ts",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/generate-study-material.ts",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/generate-study-material.ts",
+      "target": "file:models/note-chunk.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/generate-study-material.ts",
+      "target": "file:lib/ai/gemini.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/generate-study-material.ts",
+      "target": "file:lib/ai/chunk-content.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "function:lib/ai/generate-study-material.ts:generateStudyMaterial",
+      "target": "function:lib/db.ts:connectToDatabase",
+      "type": "calls",
+      "weight": 0.9
+    },
+    {
+      "source": "function:lib/ai/generate-study-material.ts:generateStudyMaterial",
+      "target": "function:lib/ai/gemini.ts:getGeminiModel",
+      "type": "calls",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/process-images.ts",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/process-images.ts",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/process-images.ts",
+      "target": "file:lib/ai/gemini.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/process-images.ts",
+      "target": "file:lib/ai/generate-study-material.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/ai/process-images.ts",
+      "target": "file:lib/ai/process-scanned-pdf.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "function:lib/ai/process-images.ts:processImages",
+      "target": "function:lib/ai/gemini.ts:getGeminiModel",
+      "type": "calls",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/process-scanned-pdf.ts",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/process-scanned-pdf.ts",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/process-scanned-pdf.ts",
+      "target": "file:lib/ai/gemini.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ai/process-scanned-pdf.ts",
+      "target": "file:lib/ai/generate-study-material.ts",
+      "type": "imports",
+      "weight": 0.7
+    },
+    {
+      "source": "function:lib/ai/process-scanned-pdf.ts:processScannedPdf",
+      "target": "function:lib/ai/gemini.ts:getGeminiModel",
+      "type": "calls",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/api/notes.ts",
+      "target": "file:lib/actions/get-all-notes.ts",
+      "type": "imports",
+      "weight": 0.5
+    },
+    {
+      "source": "file:lib/extraction/process-note.ts",
+      "target": "file:lib/db.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/extraction/process-note.ts",
+      "target": "file:models/note.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/extraction/process-note.ts",
+      "target": "file:models/note-chunk.model.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/extraction/process-note.ts",
+      "target": "file:lib/extraction/extract-pdf.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/extraction/process-note.ts",
+      "target": "file:lib/ai/generate-study-material.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/extraction/process-note.ts",
+      "target": "file:lib/ai/chunk-content.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/extraction/process-note.ts",
+      "target": "file:lib/ai/process-scanned-pdf.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/extraction/process-note.ts",
+      "target": "file:lib/ai/process-images.ts",
+      "type": "imports",
+      "weight": 1
+    },
+    {
+      "source": "function:lib/extraction/process-note.ts:processNote",
+      "target": "function:lib/extraction/extract-pdf.ts:extractPDFText",
+      "type": "calls",
+      "weight": 1
+    },
+    {
+      "source": "function:lib/extraction/process-note.ts:processNote",
+      "target": "function:lib/ai/generate-study-material.ts:generateStudyMaterial",
+      "type": "calls",
+      "weight": 1
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:middleware",
+      "name": "Middleware Layer",
+      "description": "Authentication and request interception middleware that protects routes and handles session management",
+      "nodeIds": [
+        "file:proxy.ts",
+        "function:proxy.ts:clerkMiddleware"
+      ]
+    },
+    {
+      "id": "layer:config",
+      "name": "Config Layer",
+      "description": "Project configuration files including build tools, TypeScript, ESLint, PostCSS, and environment settings",
+      "nodeIds": [
+        "config:.env",
+        "config:components.json",
+        "config:eslint.config.mjs",
+        "config:next.config.ts",
+        "config:package.json",
+        "config:pnpm-workspace.yaml",
+        "config:postcss.config.mjs",
+        "config:tsconfig.json"
+      ]
+    },
+    {
+      "id": "layer:docs",
+      "name": "Documentation Layer",
+      "description": "Project documentation and developer guides including README and agent instructions",
+      "nodeIds": [
+        "document:AGENTS.md",
+        "document:CLAUDE.md",
+        "document:README.md"
+      ]
+    },
+    {
+      "id": "layer:routes-pages",
+      "name": "Routes & Pages Layer",
+      "description": "Next.js App Router page components and layouts that define the user-facing route structure",
+      "nodeIds": [
+        "file:app/layout.tsx",
+        "function:app/layout.tsx:RootLayout",
+        "file:app/page.tsx",
+        "function:app/page.tsx:Home",
+        "file:app/dashboard/layout.tsx",
+        "function:app/dashboard/layout.tsx:DashboardLayout",
+        "file:app/dashboard/page.tsx",
+        "function:app/dashboard/page.tsx:DashboardPage",
+        "function:app/dashboard/page.tsx:formatDate",
+        "function:app/dashboard/page.tsx:getFileTypeLabel",
+        "function:app/dashboard/page.tsx:getFileTypeColor",
+        "function:app/dashboard/page.tsx:getQuestionCount",
+        "file:app/dashboard/generate/page.tsx",
+        "function:app/dashboard/generate/page.tsx:GenerateNotesPage",
+        "file:app/dashboard/notes/page.tsx",
+        "function:app/dashboard/notes/page.tsx:NotesPage",
+        "file:app/dashboard/notes/[id]/loading.tsx",
+        "function:app/dashboard/notes/[id]/loading.tsx:NoteDetailsLoading",
+        "file:app/dashboard/notes/[id]/page.tsx",
+        "function:app/dashboard/notes/[id]/page.tsx:NoteDetailsPage",
+        "function:app/dashboard/notes/[id]/page.tsx:formatDate",
+        "function:app/dashboard/notes/[id]/page.tsx:getRevisionPoints"
+      ]
+    },
+    {
+      "id": "layer:api",
+      "name": "API Layer",
+      "description": "Next.js API route handlers providing RESTful endpoints for notes, search, questions, and revision data",
+      "nodeIds": [
+        "endpoint:app/api/notes/route.ts:GET",
+        "endpoint:app/api/notes/upload/route.ts:POST",
+        "endpoint:app/api/notes/[id]/questions/route.ts:GET",
+        "endpoint:app/api/notes/[id]/revision/route.ts:GET",
+        "endpoint:app/api/notes/[id]/status/route.ts:GET",
+        "endpoint:app/api/search/route.ts:GET",
+        "file:app/api/notes/upload/route.ts",
+        "file:app/api/notes/route.ts"
+      ]
+    },
+    {
+      "id": "layer:ui-components",
+      "name": "UI Components Layer",
+      "description": "Reusable UI and layout components including form elements, navigation, and study material displays",
+      "nodeIds": [
+        "file:components/layout/navbar.tsx",
+        "function:components/layout/navbar.tsx:Navbar",
+        "file:components/layout/sidebar.tsx",
+        "function:components/layout/sidebar.tsx:Sidebar",
+        "file:components/providers/query-provider.tsx",
+        "function:components/providers/query-provider.tsx:QueryProvider",
+        "file:components/ui/button.tsx",
+        "file:components/ui/card.tsx",
+        "file:components/ui/input.tsx",
+        "file:components/ui/select.tsx",
+        "file:components/ui/table.tsx",
+        "file:components/ui/tabs.tsx",
+        "file:components/generate-notes-upload.tsx",
+        "function:components/generate-notes-upload.tsx:GenerateNotesUpload",
+        "function:components/generate-notes-upload.tsx:formatFileSize",
+        "function:components/generate-notes-upload.tsx:getDisplayType",
+        "function:components/generate-notes-upload.tsx:toUploadedFile",
+        "file:components/upload-progress.tsx",
+        "function:components/upload-progress.tsx:UploadProgress",
+        "file:app/dashboard/notes/[id]/note-study-tabs.client.tsx",
+        "function:app/dashboard/notes/[id]/note-study-tabs.client.tsx:NoteStudyTabs",
+        "file:app/dashboard/notes/[id]/note-study-tabs.tsx",
+        "function:app/dashboard/notes/[id]/note-study-tabs.tsx:NoteStudyTabs"
+      ]
+    },
+    {
+      "id": "layer:hooks",
+      "name": "Custom Hooks Layer",
+      "description": "React custom hooks for data fetching, debouncing, and note status polling",
+      "nodeIds": [
+        "file:hooks/use-debounce.ts",
+        "function:hooks/use-debounce.ts:useDebounce",
+        "file:hooks/use-note-status.ts",
+        "function:hooks/use-note-status.ts:useNoteStatus",
+        "file:hooks/use-notes.ts",
+        "function:hooks/use-notes.ts:useNotes"
+      ]
+    },
+    {
+      "id": "layer:lib-core",
+      "name": "Core Library Layer",
+      "description": "Shared utility functions, database connection, blob storage, and API client wrappers",
+      "nodeIds": [
+        "file:lib/blob-upload.ts",
+        "function:lib/blob-upload.ts:uploadFilesToBlob",
+        "file:lib/db.ts",
+        "function:lib/db.ts:connectToDatabase",
+        "file:lib/utils.ts",
+        "function:lib/utils.ts:cn",
+        "file:lib/api/notes.ts",
+        "function:lib/api/notes.ts:getNotes",
+        "file:lib/validations/note.ts"
+      ]
+    },
+    {
+      "id": "layer:services",
+      "name": "Service Layer",
+      "description": "Business logic services including server actions, AI generation, file extraction, and content processing",
+      "nodeIds": [
+        "file:lib/actions/get-all-notes.ts",
+        "function:lib/actions/get-all-notes.ts:getAllNotes",
+        "file:lib/actions/get-note-by-id.ts",
+        "function:lib/actions/get-note-by-id.ts:getNoteById",
+        "file:lib/actions/get-recent-notes.ts",
+        "function:lib/actions/get-recent-notes.ts:getRecentNotes",
+        "file:lib/ai/chunk-content.ts",
+        "function:lib/ai/chunk-content.ts:chunkExtractedContent",
+        "file:lib/ai/gemini.ts",
+        "function:lib/ai/gemini.ts:getGeminiModel",
+        "file:lib/ai/generate-study-material.ts",
+        "function:lib/ai/generate-study-material.ts:generateStudyMaterial",
+        "file:lib/ai/process-images.ts",
+        "function:lib/ai/process-images.ts:processImages",
+        "file:lib/ai/process-scanned-pdf.ts",
+        "function:lib/ai/process-scanned-pdf.ts:processScannedPdf",
+        "file:lib/extraction/extract-images.ts",
+        "file:lib/extraction/extract-pdf.ts",
+        "function:lib/extraction/extract-pdf.ts:extractPDFText",
+        "file:lib/extraction/process-note.ts",
+        "function:lib/extraction/process-note.ts:processNote"
+      ]
+    },
+    {
+      "id": "layer:models",
+      "name": "Data Model Layer",
+      "description": "Mongoose data models defining MongoDB schemas for notes and content chunks",
+      "nodeIds": [
+        "file:models/note-chunk.model.ts",
+        "file:models/note.model.ts"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "Project Overview",
+      "description": "ExamPrepAI is a Next.js application that uses Google Gemini AI to automatically generate study materials (important questions and quick revision notes) from uploaded PDF and image files.",
+      "nodeIds": [
+        "document:README.md",
+        "config:package.json"
+      ]
+    },
+    {
+      "order": 2,
+      "title": "Authentication & Middleware",
+      "description": "Clerk authentication middleware protects all routes. The proxy.ts file configures the middleware matcher, while the root layout wraps the app with ClerkProvider for sign-in/sign-up flows.",
+      "nodeIds": [
+        "file:proxy.ts",
+        "file:app/layout.tsx"
+      ]
+    },
+    {
+      "order": 3,
+      "title": "Dashboard Layout",
+      "description": "The authenticated dashboard area has a persistent layout with a Sidebar navigation menu and a Navbar search bar. All dashboard pages render within this shell.",
+      "nodeIds": [
+        "file:app/dashboard/layout.tsx",
+        "file:components/layout/sidebar.tsx",
+        "file:components/layout/navbar.tsx"
+      ]
+    },
+    {
+      "order": 4,
+      "title": "Upload & Generate Study Materials",
+      "description": "The core upload flow lives in generate-notes-upload.tsx. Users drag-and-drop PDFs or images, fill in title/subject, and submit. Files are uploaded to Vercel Blob, then background processing begins. Upload progress is tracked with step-by-step status indicators.",
+      "nodeIds": [
+        "file:components/generate-notes-upload.tsx",
+        "file:components/upload-progress.tsx",
+        "endpoint:app/api/notes/upload/route.ts:POST"
+      ]
+    },
+    {
+      "order": 5,
+      "title": "AI Content Processing Pipeline",
+      "description": "After upload, process-note.ts orchestrates the full extraction pipeline: PDF text extraction (or Gemini Vision for scanned PDFs/images), content chunking, and AI study material generation via Google Gemini. The pipeline runs asynchronously using Next.js after() to keep the serverless function alive.",
+      "nodeIds": [
+        "file:lib/extraction/process-note.ts",
+        "file:lib/extraction/extract-pdf.ts",
+        "file:lib/ai/process-scanned-pdf.ts",
+        "file:lib/ai/process-images.ts",
+        "file:lib/ai/chunk-content.ts",
+        "file:lib/ai/generate-study-material.ts"
+      ]
+    },
+    {
+      "order": 6,
+      "title": "Gemini AI Integration",
+      "description": "The Gemini integration configures the generative AI model and handles prompt construction for generating important questions and quick revision points from extracted note content.",
+      "nodeIds": [
+        "file:lib/ai/gemini.ts",
+        "file:lib/ai/generate-study-material.ts",
+        "file:lib/ai/chunk-content.ts"
+      ]
+    },
+    {
+      "order": 7,
+      "title": "Data Models & Database",
+      "description": "MongoDB stores notes and generated content chunks. Mongoose models define the schema for notes (with processing status tracking) and individual content chunks for paginated retrieval.",
+      "nodeIds": [
+        "file:models/note.model.ts",
+        "file:models/note-chunk.model.ts",
+        "file:lib/db.ts"
+      ]
+    },
+    {
+      "order": 8,
+      "title": "Server Actions & API Routes",
+      "description": "Server actions (getAllNotes, getNoteById, getRecentNotes) query MongoDB for notes. API routes expose paginated endpoints for questions, revision items, and search with cursor-based pagination.",
+      "nodeIds": [
+        "file:lib/actions/get-all-notes.ts",
+        "file:lib/actions/get-note-by-id.ts",
+        "file:lib/actions/get-recent-notes.ts",
+        "endpoint:app/api/notes/[id]/questions/route.ts:GET",
+        "endpoint:app/api/notes/[id]/revision/route.ts:GET",
+        "endpoint:app/api/search/route.ts:GET"
+      ]
+    },
+    {
+      "order": 9,
+      "title": "Dashboard Pages & Notes Management",
+      "description": "The dashboard home shows a recent notes overview. The full notes listing page supports grid/list views, search, sort, and pagination. The note detail page displays full study materials with tabbed questions and revision content.",
+      "nodeIds": [
+        "file:app/dashboard/page.tsx",
+        "file:app/dashboard/notes/page.tsx",
+        "file:app/dashboard/notes/[id]/page.tsx",
+        "file:app/dashboard/notes/[id]/note-study-tabs.client.tsx"
+      ]
+    },
+    {
+      "order": 10,
+      "title": "Custom Hooks & Client Data Fetching",
+      "description": "Custom React hooks encapsulate data fetching logic: useNotes for paginated note listing, useNoteStatus for polling processing status, and useDebounce for search input debouncing.",
+      "nodeIds": [
+        "file:hooks/use-notes.ts",
+        "file:hooks/use-note-status.ts",
+        "file:hooks/use-debounce.ts",
+        "file:lib/api/notes.ts"
+      ]
+    }
+  ]
+}

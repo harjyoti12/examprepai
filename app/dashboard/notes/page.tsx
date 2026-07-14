@@ -5,15 +5,11 @@ import {
   ArrowDown,
   ChevronLeft,
   ChevronRight,
-  FileImage,
-  FileText,
-  Grid2X2,
-  List,
   Loader2,
   MoreVertical,
+  Eye,
   NotebookTabs,
   Search,
-  SlidersHorizontal,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -35,6 +31,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { FileTypeIcon } from "@/components/ui/file-type-icon";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { DeleteNoteDialog } from "@/components/ui/delete-note-dialog";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { useNotes } from "@/hooks/use-notes";
 import type { AllNote } from "@/lib/actions/get-all-notes";
@@ -103,58 +107,6 @@ function formatTime(value: string) {
   }).format(new Date(value));
 }
 
-function getFileTypeLabel(note: AllNote) {
-  const extension = note.title.split(".").pop()?.toLowerCase();
-
-  if (extension === "png") {
-    return "png";
-  }
-
-  if (extension === "jpg" || extension === "jpeg") {
-    return extension;
-  }
-
-  return note.fileType;
-}
-
-function getFileStyle(type: string) {
-  const normalizedType = type.toLowerCase();
-
-  if (normalizedType === "pdf") {
-    return {
-      icon: FileText,
-      label: "PDF",
-      className: "bg-red-500 text-white",
-    };
-  }
-
-  if (normalizedType === "png") {
-    return {
-      icon: FileImage,
-      label: "PNG",
-      className: "bg-pink-500 text-white",
-    };
-  }
-
-  if (
-    normalizedType === "image" ||
-    normalizedType === "jpg" ||
-    normalizedType === "jpeg"
-  ) {
-    return {
-      icon: FileImage,
-      label: normalizedType === "jpeg" ? "JPG" : normalizedType.toUpperCase(),
-      className: "bg-emerald-500 text-white",
-    };
-  }
-
-  return {
-    icon: FileText,
-    label: normalizedType.toUpperCase(),
-    className: "bg-gray-500 text-white",
-  };
-}
-
 function getSubjectBadgeClass(subject: string) {
   const normalizedSubject = subject.toLowerCase();
 
@@ -201,7 +153,7 @@ function MyNotesContent() {
     if (search === urlSearch) return;
     const id = window.setTimeout(() => setSearch(urlSearch), 0);
     return () => window.clearTimeout(id);
-  }, [urlSearch, search]);
+  }, [urlSearch]);
 
   // debounce input -> update URL (page reset to 1)
   useEffect(() => {
@@ -242,9 +194,10 @@ function MyNotesContent() {
   return (
     <main className="main-container font-jakarta text-[#11172F]">
       <div className="w-full space-y-5">
+        {/* Header */}
         <section className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-[28px] font-extrabold leading-tight tracking-tight text-[#11172F]">
+            <h1 className="notes-page-title text-[28px] font-extrabold leading-tight tracking-tight text-[#11172F]">
               My Notes
             </h1>
             <p className="mt-2 text-[15px] font-medium text-[#5B668A]">
@@ -267,8 +220,46 @@ function MyNotesContent() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
+        {/* Search + Filters */}
+        <section className="notes-page-controls rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+          {/* Mobile: Search + Newest First in one line */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <div className="relative min-w-0 flex-1">
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#53617F]" />
+              {isFetching && !isLoading ? (
+                <Loader2 className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[#53617F]" />
+              ) : null}
+              <Input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search notes..."
+                aria-label="Search notes"
+                className="h-11 rounded-xl border-gray-200 bg-white pl-12 pr-12 text-[14px] font-medium text-[#11172F] shadow-sm placeholder:text-[#6E7897] focus-visible:ring-violet-200"
+              />
+            </div>
+            <Select
+              value={urlSort}
+              onValueChange={(value) => {
+                const params = new URLSearchParams();
+                if (urlSearch.trim()) params.set("search", urlSearch.trim());
+                params.set("page", String(1));
+                params.set("sort", value);
+                router.push(`${pathname}?${params.toString()}`);
+              }}
+            >
+              <SelectTrigger className="notes-page-select h-11 w-[130px] shrink-0 rounded-xl border-gray-200 bg-white text-[13px] font-bold text-[#1E2643] shadow-sm">
+                <SelectValue placeholder="Newest First" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest">Newest First</SelectItem>
+                <SelectItem value="oldest">Oldest First</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Desktop: Full two-row layout */}
+          <div className="hidden lg:flex lg:flex-col lg:gap-3">
+            {/* Search row */}
             <div className="relative min-w-0 flex-1">
               <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#53617F]" />
               {isFetching && !isLoading ? (
@@ -278,21 +269,15 @@ function MyNotesContent() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search notes by title, subject..."
+                aria-label="Search notes by title or subject"
                 className="h-11 rounded-xl border-gray-200 bg-white pl-12 pr-12 text-[14px] font-medium text-[#11172F] shadow-sm placeholder:text-[#6E7897] focus-visible:ring-violet-200"
               />
             </div>
 
+            {/* Filter row */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <Button
-                variant="outline"
-                className="h-11 rounded-xl border-gray-200 bg-white px-4 text-[14px] font-bold text-[#1E2643] shadow-sm hover:bg-gray-50"
-              >
-                <SlidersHorizontal className="h-4 w-4 text-[#53617F]" />
-                Filter
-              </Button>
-
               <Select defaultValue="all">
-                <SelectTrigger className="h-11 w-[190px]">
+                <SelectTrigger className="notes-page-select h-11 w-[190px]">
                   <SelectValue placeholder="All Subjects" />
                 </SelectTrigger>
                 <SelectContent>
@@ -311,7 +296,7 @@ function MyNotesContent() {
                   router.push(`${pathname}?${params.toString()}`);
                 }}
               >
-                <SelectTrigger className="h-11 w-[190px]">
+                <SelectTrigger className="notes-page-select h-11 w-[190px]">
                   <SelectValue placeholder="Newest First" />
                 </SelectTrigger>
                 <SelectContent>
@@ -319,152 +304,209 @@ function MyNotesContent() {
                   <SelectItem value="oldest">Oldest First</SelectItem>
                 </SelectContent>
               </Select>
-
-              <div className="flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  className="h-9 w-9 rounded-lg border-violet-300 bg-violet-50 text-violet-700 hover:bg-violet-50"
-                >
-                  <List className="h-4 w-4" />
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 rounded-lg text-[#53617F] hover:bg-gray-50"
-                >
-                  <Grid2X2 className="h-4 w-4" />
-                </Button>
-              </div>
             </div>
           </div>
         </section>
 
+        {/* Notes content */}
         <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
           {isLoading ? (
-            <div className="flex min-h-[280px] items-center justify-center px-6 py-12 text-center text-[14px] font-medium text-[#6E7897]">
-              Loading notes...
-            </div>
+            <>
+              {/* Desktop skeleton */}
+              <div className="hidden lg:flex min-h-[280px] items-center justify-center px-6 py-12 text-center text-[14px] font-medium text-[#6E7897]">
+                Loading notes...
+              </div>
+              {/* Mobile skeletons */}
+              <div className="lg:hidden space-y-3 p-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="note-card-skeleton animate-pulse">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-[#E4E7EC] shrink-0" />
+                      <div className="h-4 flex-1 rounded bg-[#E4E7EC]" />
+                      <div className="w-8 h-8 rounded-lg bg-[#E4E7EC] shrink-0" />
+                    </div>
+                    <div className="flex items-center justify-between gap-2 mt-2 ml-12">
+                      <div className="flex items-center gap-2">
+                        <div className="h-3 w-16 rounded bg-[#E4E7EC]" />
+                        <div className="h-3 w-14 rounded bg-[#E4E7EC]" />
+                        <div className="h-3 w-12 rounded bg-[#E4E7EC]" />
+                      </div>
+                      <div className="h-7 w-20 rounded-md bg-[#E4E7EC] shrink-0 hide-mobile-sm" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : isError ? (
             <div className="flex min-h-[280px] items-center justify-center px-6 py-12 text-center text-[14px] font-medium text-[#6E7897]">
               Failed to load notes.
             </div>
           ) : notes.length > 0 ? (
             <>
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-gray-200 bg-[#FBFCFF] hover:bg-[#FBFCFF]">
-                    <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#6B7593]">
-                      File Name
-                    </TableHead>
-                    <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#6B7593]">
-                      Subject
-                    </TableHead>
-                    <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#11172F]">
-                      <span className="inline-flex items-center gap-1.5">
-                        Uploaded On
-                        <ArrowDown className="h-3.5 w-3.5" />
-                      </span>
-                    </TableHead>
-                    <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#6B7593]">
-                      Questions
-                    </TableHead>
-                    <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#6B7593]">
-                      Actions
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {visibleNotes.map((note) => {
-                    const fileType = getFileTypeLabel(note);
-                    const fileStyle = getFileStyle(fileType);
-                    const FileIcon = fileStyle.icon;
+              {/* ── Table (desktop) ── */}
+              <div className="hidden lg:block">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-gray-200 bg-[#FBFCFF] hover:bg-[#FBFCFF]">
+                      <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#6B7593]">
+                        File Name
+                      </TableHead>
+                      <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#6B7593]">
+                        Subject
+                      </TableHead>
+                      <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#11172F]">
+                        <span className="inline-flex items-center gap-1.5">
+                          Uploaded On
+                          <ArrowDown className="h-3.5 w-3.5" />
+                        </span>
+                      </TableHead>
+                      <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#6B7593]">
+                        Questions
+                      </TableHead>
+                      <TableHead className="h-12 px-5 text-[12.5px] font-extrabold text-[#6B7593]">
+                        Actions
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {visibleNotes.map((note) => {
+                      return (
+                        <TableRow
+                          key={note._id}
+                          className="border-gray-100 hover:bg-violet-50/20"
+                        >
+                          <TableCell className="px-5 py-4">
+                            <div className="flex min-w-[300px] items-center gap-3">
+                              <FileTypeIcon fileType={note.fileType} title={note.title} />
+                              <div className="min-w-0">
+                                <p className="truncate text-[15px] font-extrabold text-[#1B2442]">
+                                  {note.title}
+                                </p>
+                              </div>
+                            </div>
+                          </TableCell>
 
-                    return (
-                      <TableRow
-                        key={note._id}
-                        className="border-gray-100 hover:bg-violet-50/20"
-                      >
-                        <TableCell className="px-5 py-4">
-                          <div className="flex min-w-[300px] items-center gap-3">
-                            <div
+                          <TableCell className="px-5 py-4">
+                            <span
                               className={cn(
-                                "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-md",
-                                fileStyle.className
+                                "inline-flex rounded-md border px-3 py-1 text-[12.5px] font-bold",
+                                getSubjectBadgeClass(note.subject)
                               )}
                             >
-                              <FileIcon className="h-4.5 w-4.5" />
-                              <span className="absolute bottom-1 text-[8px] font-extrabold leading-none">
-                                {fileStyle.label}
-                              </span>
+                              {note.subject}
+                            </span>
+                          </TableCell>
+
+                          <TableCell className="px-5 py-4">
+                            <p className="text-[14px] font-medium text-[#34405E]">
+                              {formatDate(note.createdAt)}
+                            </p>
+                            <p className="mt-1 text-[12.5px] font-medium text-[#6E7897]">
+                              {formatTime(note.createdAt)}
+                            </p>
+                          </TableCell>
+
+                          <TableCell className="px-5 py-4 text-[14px] font-medium text-[#34405E]">
+                            {getQuestionCount(note)} Q&A
+                          </TableCell>
+
+                          <TableCell className="px-5 py-4">
+                            <div className="flex items-center gap-4">
+                              <Button
+                                variant="outline"
+                                className="h-9 rounded-lg border-violet-200 bg-white px-5 text-[13px] font-extrabold text-violet-700 hover:border-violet-300 hover:bg-violet-50"
+                                asChild
+                              >
+                                <Link href={`/dashboard/notes/${note._id}`}>
+                                  View Results
+                                </Link>
+                              </Button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <button
+                                    type="button"
+                                    aria-label={`More actions for ${note.title}`}
+                                    className="flex h-9 w-9 items-center justify-center rounded-lg text-[#53617F] transition-colors hover:bg-violet-50 hover:text-violet-700"
+                                  >
+                                    <MoreVertical className="h-4.5 w-4.5" />
+                                  </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem asChild>
+                                    <Link href={`/dashboard/notes/${note._id}`}>
+                                      <Eye size={15} strokeWidth={2} />
+                                      View Results
+                                    </Link>
+                                  </DropdownMenuItem>
+                                  <DeleteNoteDialog noteId={note._id} noteTitle={note.title} />
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             </div>
-                            <div className="min-w-0">
-                              <p className="truncate text-[15px] font-extrabold text-[#1B2442]">
-                                {note.title}
-                              </p>
-                              
-                            </div>
-                          </div>
-                        </TableCell>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
 
-                        <TableCell className="px-5 py-4">
-                          <span
-                            className={cn(
-                              "inline-flex rounded-md border px-3 py-1 text-[12.5px] font-bold",
-                              getSubjectBadgeClass(note.subject)
-                            )}
-                          >
-                            {note.subject}
-                          </span>
-                        </TableCell>
+              {/* ── Cards (mobile) ── */}
+              <div className="lg:hidden space-y-3">
+                {visibleNotes.map((note) => {
+                  const qa = getQuestionCount(note);
 
-                        <TableCell className="px-5 py-4">
-                          <p className="text-[14px] font-medium text-[#34405E]">
-                            {formatDate(note.createdAt)}
-                          </p>
-                          <p className="mt-1 text-[12.5px] font-medium text-[#6E7897]">
-                            {formatTime(note.createdAt)}
-                          </p>
-                        </TableCell>
-
-                        <TableCell className="px-5 py-4 text-[14px] font-medium text-[#34405E]">
-                          {getQuestionCount(note)} Q&A
-                        </TableCell>
-
-                        <TableCell className="px-5 py-4">
-                          <div className="flex items-center gap-4">
-                            <Button
-                              variant="outline"
-                              className="h-9 rounded-lg border-violet-200 bg-white px-5 text-[13px] font-extrabold text-violet-700 hover:border-violet-300 hover:bg-violet-50"
-                              asChild
-                            >
+                  return (
+                    <div key={note._id} className="note-card">
+                      {/* Row 1: Icon + Title + Menu */}
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 shrink-0">
+                          <FileTypeIcon fileType={note.fileType} title={note.title} />
+                        </div>
+                        <span className="table-file-name flex-1 min-w-0 truncate">{note.title}</span>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button className="btn-icon shrink-0" aria-label={`More actions for ${note.title}`}>
+                              <MoreVertical size={16} strokeWidth={1.8} />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem asChild>
                               <Link href={`/dashboard/notes/${note._id}`}>
+                                <Eye size={15} strokeWidth={2} />
                                 View Results
                               </Link>
-                            </Button>
-                            <button
-                              type="button"
-                              aria-label={`More actions for ${note.title}`}
-                              className="flex h-9 w-9 items-center justify-center rounded-lg text-[#53617F] transition-colors hover:bg-violet-50 hover:text-violet-700"
-                            >
-                              <MoreVertical className="h-4.5 w-4.5" />
-                            </button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                            </DropdownMenuItem>
+                            <DeleteNoteDialog noteId={note._id} noteTitle={note.title} />
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                      {/* Row 2: Metadata + View Results */}
+                      <div className="flex items-center justify-between gap-2 mt-2 ml-12">
+                        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-gray-500">
+                          <span className="whitespace-nowrap">{note.subject}</span>
+                          <span className="whitespace-nowrap">{formatDate(note.createdAt)}</span>
+                          <span className="font-medium whitespace-nowrap">{qa} Q&A</span>
+                        </div>
+                        <div className="shrink-0 hide-mobile-sm">
+                          <Button variant="outline" className="btn-results" asChild>
+                            <Link href={`/dashboard/notes/${note._id}`}>
+                              View Results
+                            </Link>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
+              {/* Pagination */}
               <div className="flex flex-col gap-3 border-t border-gray-100 px-5 py-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-[13px] font-medium text-[#53617F]">
                   Showing {showingStart} to {showingEnd} of{" "}
                   {totalNotes} notes
                 </p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2">
                   <Button
                     type="button"
                     variant="outline"
@@ -478,13 +520,13 @@ function MyNotesContent() {
 
                       router.push(`${pathname}?${params.toString()}`);
                     }}
-                    className="h-9 w-9 rounded-lg border-gray-200 bg-white text-[#53617F]"
+                    className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg border-gray-200 bg-white text-[#53617F]"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
                   {getVisiblePages(currentPage, pagination.totalPages).map((p, idx) =>
                     p === "..." ? (
-                      <div key={`ellipsis-${idx}`} className="flex h-9 w-9 items-center justify-center px-0 text-[13px] font-extrabold text-[#53617F]">
+                      <div key={`ellipsis-${idx}`} className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center px-0 text-[13px] font-extrabold text-[#53617F]">
                         ...
                       </div>
                     ) : (
@@ -501,7 +543,7 @@ function MyNotesContent() {
                           router.push(`${pathname}?${params.toString()}`);
                         }}
                         className={cn(
-                          "h-9 w-9 rounded-lg px-0 text-[13px] font-extrabold",
+                          "h-8 w-8 sm:h-9 sm:w-9 rounded-lg px-0 text-[13px] font-extrabold",
                           p === currentPage
                             ? "bg-violet-600 text-white hover:bg-violet-700"
                             : "border-gray-200 bg-white text-[#11172F]"
@@ -524,7 +566,7 @@ function MyNotesContent() {
 
                       router.push(`${pathname}?${params.toString()}`);
                     }}
-                    className="h-9 w-9 rounded-lg border-gray-200 bg-white text-[#53617F]"
+                    className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg border-gray-200 bg-white text-[#53617F]"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Button>
@@ -532,14 +574,11 @@ function MyNotesContent() {
               </div>
             </>
           ) : (
-            <div className="flex min-h-[280px] flex-col items-center justify-center px-6 py-12 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 text-violet-700">
-                <NotebookTabs className="h-7 w-7" />
-              </div>
-              <h2 className="mt-4 text-[18px] font-extrabold text-[#11172F]">
-                {hasSearch ? "No notes found" : "No study notes found"}
-              </h2>
-              <p className="mt-2 text-[14px] font-medium text-[#6E7897]">
+            <div className="note-card-empty text-center py-8">
+              <p className="text-[13.5px] font-semibold text-gray-700">
+                {hasSearch ? "No notes matched your search." : "No study notes generated yet."}
+              </p>
+              <p className="mt-1 text-[12.5px] text-gray-400">
                 {hasSearch
                   ? "Try a different title or subject."
                   : "Upload your first PDF or image to begin."}

@@ -1,6 +1,6 @@
 import { connectToDatabase } from "../db";
 import NoteModel from "../../models/note.model";
-import { getGeminiModel } from "./gemini";
+import { generateWithFallback } from "./provider-manager";
 import { StudyMaterial } from "./generate-study-material";
 import { extractJsonPayload, parseStudyMaterial } from "./process-scanned-pdf";
 import { SchemaType, type ResponseSchema } from "@google/generative-ai";
@@ -117,14 +117,7 @@ export async function processImages(noteId: string): Promise<ProcessImagesResult
       quickRevision: [],
     };
 
-    const model = getGeminiModel({
-      maxOutputTokens: 8192,
-      responseSchema: STUDY_MATERIAL_RESPONSE_SCHEMA,
-    });
-
     for (const imageUrl of note.fileUrls) {
-      console.log(`Processing image note ${noteId} with image URL: ${imageUrl}`);
-
       const response = await fetch(imageUrl);
       if (!response.ok) {
         throw new Error(`Failed to fetch image from ${imageUrl}: ${response.statusText}`);
@@ -134,22 +127,28 @@ export async function processImages(noteId: string): Promise<ProcessImagesResult
       const imageBase64 = imageBuffer.toString("base64");
       const mimeType = normalizeMimeType(response.headers.get("content-type"));
 
-      const rawResult = await model.generateContent({
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { text: IMAGE_PROMPT },
-              {
-                inlineData: {
-                  mimeType,
-                  data: imageBase64,
+      const rawResult = await generateWithFallback(
+        {
+          maxOutputTokens: 8192,
+          responseSchema: STUDY_MATERIAL_RESPONSE_SCHEMA,
+        },
+        {
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: IMAGE_PROMPT },
+                {
+                  inlineData: {
+                    mimeType,
+                    data: imageBase64,
+                  },
                 },
-              },
-            ],
-          },
-        ],
-      });
+              ],
+            },
+          ],
+        },
+      );
 
       const rawOutput = rawResult.response.text();
       const jsonCandidate = extractJsonPayload(rawOutput);
@@ -160,7 +159,6 @@ export async function processImages(noteId: string): Promise<ProcessImagesResult
     }
 
     note.generatedContent = merged;
-    note.processingStatus = "completed";
     await note.save();
 
     return {

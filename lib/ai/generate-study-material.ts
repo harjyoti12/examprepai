@@ -1,7 +1,7 @@
 import { connectToDatabase } from "../db";
 import NoteModel from "../../models/note.model";
 import NoteChunkModel from "../../models/note-chunk.model";
-import { getGeminiModel } from "./gemini";
+import { generateWithFallback } from "./provider-manager";
 import {
   createNoteChunksFromPages,
   type ExtractedPageChunk,
@@ -135,8 +135,6 @@ async function loadStudyMaterialChunks(
     .lean()
     .exec();
 
-  console.log("AI loaded NoteChunk records:", storedChunks.length);
-
   if (storedChunks.length > 0) {
     return storedChunks.map((chunk) => ({
       chunkIndex: chunk.chunkIndex,
@@ -147,8 +145,6 @@ async function loadStudyMaterialChunks(
   if (!Array.isArray(extractedContent) || extractedContent.length === 0) {
     return [];
   }
-
-  console.log("AI falling back to note.extractedContent chunks.");
 
   // Backward compatibility for older PDF notes created before NoteChunk existed.
   return createNoteChunksFromPages(extractedContent).map((chunk: NoteChunkInput) => ({
@@ -191,14 +187,11 @@ export async function generateStudyMaterial(
       quickRevision: [],
     };
 
-    const model = getGeminiModel();
-
     for (let index = 0; index < chunks.length; index += 1) {
       const chunkText = chunks[index].content;
       const prompt = createPrompt(chunkText, note.title, note.subject);
-      console.log(`Generating AI content for note ${noteId}, chunk ${index + 1}/${chunks.length}`);
 
-      const response = await model.generateContent({
+      const response = await generateWithFallback({}, {
         contents: [
           {
             role: "user",
@@ -216,10 +209,7 @@ export async function generateStudyMaterial(
     }
 
     note.generatedContent = merged;
-    note.processingStatus = "completed";
     await note.save();
-
-    console.log(`AI generation completed for note ${noteId}`);
 
     return {
       success: true,
