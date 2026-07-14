@@ -8,10 +8,13 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { auth } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
-import { NoteStudyTabs } from "./note-study-tabs";
 import { getNoteById } from "@/lib/actions/get-note-by-id";
+import { getPermissions } from "@/lib/business/permissions";
+import { getUserSubscription } from "@/lib/business/get-user-subscription";
 import type { StudyMaterial } from "@/lib/ai/generate-study-material";
+import { NoteStudyTabs } from "./note-study-tabs";
 
 export const dynamic = "force-dynamic";
 
@@ -33,41 +36,94 @@ function getRevisionPoints(quickRevision: StudyMaterial["quickRevision"]) {
   return quickRevision.flatMap((item) => item.points.filter(Boolean));
 }
 
-export default async function NoteDetailsPage({ params }: NoteDetailsPageProps) {
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string) {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error(`${label} timed out after ${timeoutMs}ms`));
+      }, timeoutMs);
+    }),
+  ]);
+}
+
+function NoteUnavailable({
+  title,
+  message,
+}: {
+  title: string;
+  message: string;
+}) {
+  return (
+    <main className="main-container py-10">
+      <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+          Note unavailable
+        </p>
+        <h1 className="mt-6 text-3xl font-semibold text-slate-900">
+          {title}
+        </h1>
+        <p className="mt-4 text-sm leading-6 text-slate-600">{message}</p>
+        <div className="mt-8 flex justify-center">
+          <Button asChild>
+            <Link href="/dashboard/notes">Back to notes</Link>
+          </Button>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default async function NoteDetailsPage({
+  params,
+}: NoteDetailsPageProps) {
   const { id } = await params;
-  const note = await getNoteById(id);
+
+  const { userId } = await auth();
+
+  if (!userId) {
+    return (
+      <NoteUnavailable
+        title="We could not locate this study note."
+        message="The note may have been deleted or the link is invalid. Return to your notes to continue."
+      />
+    );
+  }
+
+  let note;
+  try {
+    note = await withTimeout(getNoteById(id, userId), 10_000, "Loading note results");
+  } catch (error) {
+    console.error("[NoteDetailsPage] Failed to load note:", error);
+    return (
+      <NoteUnavailable
+        title="The results page is taking too long to load."
+        message="The server could not load this note in time. Refresh the page after restarting the dev server, or check the database and Clerk session configuration."
+      />
+    );
+  }
 
   if (!note) {
     return (
-      <main className="main-container py-10">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
-            Note not found
-          </p>
-          <h1 className="mt-6 text-3xl font-semibold text-slate-900">We could not locate this study note.</h1>
-          <p className="mt-4 text-sm leading-6 text-slate-600">
-            The note may have been deleted or the link is invalid. Return to your dashboard to continue.
-          </p>
-          <div className="mt-8 flex justify-center">
-            <Button asChild>
-              <Link href="/dashboard">Back to dashboard</Link>
-            </Button>
-          </div>
-        </div>
-      </main>
+      <NoteUnavailable
+        title="We could not locate this study note."
+        message="The note may have been deleted or the link is invalid. Return to your notes to continue."
+      />
     );
   }
 
   const generatedContent = note.generatedContent as StudyMaterial | undefined;
-  const importantQuestions = Array.isArray(generatedContent?.importantQuestions)
-    ? generatedContent.importantQuestions
-    : [];
-  const quickRevision = Array.isArray(generatedContent?.quickRevision)
-    ? generatedContent.quickRevision
-    : [];
-  const revisionPoints = getRevisionPoints(quickRevision);
+  const importantQuestions = generatedContent?.importantQuestions ?? [];
+  const quickRevision = generatedContent?.quickRevision ?? [];
+  const revisionPoints = getRevisionPoints(
+    generatedContent?.quickRevision ?? [],
+  );
+
+  const subscription = await getUserSubscription();
+  const permissions = getPermissions(subscription);
+
   const createdAt = new Date(note.createdAt);
-  const estimatedPages = note.qaCount ? Math.max(1, Math.ceil(note.qaCount / 8)) : 1;
+  const totalPages = note.totalPages || 1;
   const sourceFileHref = note.fileUrls[0] ?? "#";
 
   return (
@@ -76,8 +132,8 @@ export default async function NoteDetailsPage({ params }: NoteDetailsPageProps) 
         <section className="overflow-hidden rounded-3xl border border-violet-100 bg-[#F5F3FF] px-5 py-5 shadow-sm sm:px-7">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex min-w-0 flex-1 flex-col gap-5 sm:flex-row sm:items-center">
-              <div className="relative h-[132px] w-[178px] shrink-0 max-sm:h-[112px] max-sm:w-full">
-                <div className="absolute left-7 top-2 h-[104px] w-[82px] rotate-[-7deg] rounded-xl border border-violet-200 bg-white shadow-sm">
+              <div className="relative h-33 w-44.5 shrink-0 max-sm:h-28 max-sm:w-full">
+                <div className="absolute left-7 top-2 h-26 w-20.5 rotate-[-7deg] rounded-xl border border-violet-200 bg-white shadow-sm">
                   <div className="mx-auto mt-4 flex h-6 w-14 items-center justify-center rounded-md bg-violet-500 text-[10px] font-extrabold uppercase tracking-wide text-white">
                     Notes
                   </div>
@@ -87,7 +143,7 @@ export default async function NoteDetailsPage({ params }: NoteDetailsPageProps) 
                     <span className="block h-1.5 w-8 rounded-full bg-violet-100" />
                   </div>
                 </div>
-                <div className="absolute left-[82px] top-9 h-[92px] w-[72px] rotate-[-12deg] rounded-xl bg-violet-500 shadow-sm">
+                <div className="absolute left-20.5 top-9 h-23 w-18 -rotate-12deg rounded-xl bg-violet-500 shadow-sm">
                   <div className="mx-auto mt-4 h-3 w-11 rounded-sm bg-violet-200" />
                   <BookOpen className="absolute bottom-5 left-5 h-7 w-7 text-yellow-300" />
                 </div>
@@ -109,7 +165,7 @@ export default async function NoteDetailsPage({ params }: NoteDetailsPageProps) 
                   <div className="flex items-center gap-2">
                     <FileText className="h-4 w-4 text-[#34405E]" />
                     <span className="font-bold text-[#1E2643]">Pages:</span>
-                    <span>~{estimatedPages} (Estimated)</span>
+                    <span>{totalPages} pages</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock3 className="h-4 w-4 text-[#34405E]" />
@@ -144,6 +200,8 @@ export default async function NoteDetailsPage({ params }: NoteDetailsPageProps) 
           revisionPoints={revisionPoints}
           subject={note.subject}
           title={note.title}
+          canShare={permissions.canShare}
+          canExportPdf={permissions.canExportPdf}
         />
       </div>
     </main>

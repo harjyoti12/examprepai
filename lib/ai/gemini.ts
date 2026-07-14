@@ -1,8 +1,8 @@
-import { GoogleGenerativeAI, type GenerationConfig } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 let gemini: GoogleGenerativeAI | null = null;
 
-function getGeminiClient() {
+export function getGeminiClient() {
   if (gemini) {
     return gemini;
   }
@@ -15,25 +15,4 @@ function getGeminiClient() {
 
   gemini = new GoogleGenerativeAI(apiKey);
   return gemini;
-}
-
-
-
-export function getGeminiModel(
-  generationConfig: GenerationConfig = {},
-) {
-  // const ModelName = process.env.GEMINI_MODEL_NAME ?? "gemini-3-flash-preview";
-  const ModelName = "gemini-2.5-flash";
-  // const ModelName = process.env.GEMINI_MODEL_NAME ?? "Gemini 2.5 Flash-Lite";
-
-
-  return getGeminiClient().getGenerativeModel({
-    model: ModelName,
-    generationConfig: {
-      responseMimeType: "application/json",
-      maxOutputTokens: 64000,
-      temperature: 0.2,
-      ...generationConfig,
-    },
-  });
 }

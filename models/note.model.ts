@@ -65,6 +65,14 @@ const noteSchema = new Schema({
     type: Schema.Types.Mixed,
     required: false,
   },
+  creditsUsed: {
+    type: Number,
+    default: 0,
+  },
+  failureReason: {
+    type: String,
+    default: "",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
