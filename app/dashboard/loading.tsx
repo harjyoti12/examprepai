@@ -29,10 +29,22 @@ export default function DashboardLoading() {
         </div>
       </aside>
 
+      {/* ── MOBILE TOP BAR SKELETON (mobile only) ── */}
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 h-[52px] bg-white border-b border-[rgba(0,0,0,0.06)] flex items-center justify-between px-4 shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-[26px] h-[26px] rounded-lg bg-[#E4E7EC] animate-pulse" />
+          <div className="h-4 w-20 rounded bg-[#E4E7EC] animate-pulse" />
+        </div>
+        <div className="flex items-center gap-2.5">
+          <div className="h-6 w-16 rounded-full bg-[#E4E7EC] animate-pulse" />
+          <div className="w-8 h-8 rounded-full bg-[#E4E7EC] animate-pulse" />
+        </div>
+      </header>
+
       {/* ── MAIN CONTENT SKELETON ── */}
       <div className="flex-1 flex flex-col min-h-0">
-        {/* Navbar */}
-        <div className="h-15 bg-white border-b border-[#EAECF0] flex items-center justify-between px-5 shrink-0">
+        {/* Desktop Navbar skeleton (lg+) */}
+        <div className="hidden lg:flex h-15 bg-white border-b border-[#EAECF0] items-center justify-between px-5 shrink-0">
           <div className="h-9 w-56 rounded-lg bg-[#E4E7EC] animate-pulse" />
           <div className="flex items-center gap-3">
             <div className="h-9 w-32 rounded-xl bg-[#E4E7EC] animate-pulse" />
@@ -41,8 +53,8 @@ export default function DashboardLoading() {
           </div>
         </div>
 
-        {/* Page content */}
-        <div className="flex-1 overflow-auto p-6">
+        {/* Page content — padded for mobile top bar + bottom nav */}
+        <div className="flex-1 overflow-auto pt-[52px] pb-20 lg:pt-0 lg:pb-0 p-6">
           <div className="max-w-350 mx-auto">
             {/* ── HERO SKELETON ── */}
             <div className="rounded-2xl p-8 flex items-center justify-between mb-7 bg-[#E4E7EC] animate-pulse">
@@ -64,7 +76,7 @@ export default function DashboardLoading() {
                   ))}
                 </div>
               </div>
-              <div className="w-[250px] h-[200px] rounded-2xl bg-[#F0F2F5]" />
+              <div className="hidden sm:block w-[250px] h-[200px] rounded-2xl bg-[#F0F2F5]" />
             </div>
 
             {/* ── MY NOTES SKELETON ── */}
@@ -92,13 +104,13 @@ export default function DashboardLoading() {
                     <div className="flex-1 px-2">
                       <div className="h-3.5 w-44 rounded bg-[#E4E7EC] animate-pulse" />
                     </div>
-                    <div className="w-[140px] shrink-0 px-2">
+                    <div className="hidden sm:block w-[140px] shrink-0 px-2">
                       <div className="h-3.5 w-28 rounded bg-[#E4E7EC] animate-pulse" />
                     </div>
-                    <div className="w-[130px] shrink-0 px-2">
+                    <div className="hidden sm:block w-[130px] shrink-0 px-2">
                       <div className="h-3.5 w-24 rounded bg-[#E4E7EC] animate-pulse" />
                     </div>
-                    <div className="w-[90px] shrink-0 px-2">
+                    <div className="hidden sm:block w-[90px] shrink-0 px-2">
                       <div className="h-5 w-14 rounded-md bg-[#E4E7EC] animate-pulse" />
                     </div>
                     <div className="w-[120px] shrink-0 px-2">
@@ -118,6 +130,18 @@ export default function DashboardLoading() {
           </div>
         </div>
       </div>
+
+      {/* ── MOBILE BOTTOM NAV SKELETON (mobile only) ── */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50">
+        <div className="flex items-stretch justify-around bg-white/82 border-t border-[rgba(0,0,0,0.06)] border-t-[16px] border-t-transparent rounded-t-[16px] shadow-[0_-2px_16px_rgba(0,0,0,0.04)] px-0 pt-1.5 pb-1">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex flex-1 flex-col items-center justify-center gap-0.5 py-1 min-h-[48px]">
+              <div className="w-7 h-7 rounded-full bg-[#E4E7EC] animate-pulse" />
+              <div className="h-2.5 w-10 rounded bg-[#E4E7EC] animate-pulse" />
+            </div>
+          ))}
+        </div>
+      </nav>
     </div>
   );
 }
