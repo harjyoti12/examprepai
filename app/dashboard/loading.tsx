@@ -1,8 +1,8 @@
 export default function DashboardLoading() {
   return (
     <div className="fixed inset-0 z-50 bg-[#F7F8FC] flex">
-      {/* ── SIDEBAR SKELETON ── */}
-      <aside className="w-60 bg-white border-r border-[#D0D5DD] flex flex-col py-5 px-4 shrink-0">
+      {/* ── SIDEBAR SKELETON (desktop only) ── */}
+      <aside className="hidden lg:flex w-60 bg-white border-r border-[#D0D5DD] flex-col py-5 px-4 shrink-0">
         <div className="flex items-center gap-3 px-2 mb-7">
           <div className="w-8 h-8 rounded-lg bg-[#E4E7EC] animate-pulse" />
           <div className="h-5 w-28 rounded bg-[#E4E7EC] animate-pulse" />

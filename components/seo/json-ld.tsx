@@ -1,5 +1,8 @@
-const baseUrl =
-  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL!;
+
+const PORTFOLIO_URL = "https://jyotiversedev.vercel.app";
+const LINKEDIN_URL = "https://www.linkedin.com/in/harjyoti-kalita-75a702363";
+const X_URL = "https://x.com/herogaming7358";
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -13,6 +16,7 @@ const organizationSchema = {
   },
   description:
     "AI-powered study assistant that transforms your class notes into exam-ready questions, short answers, and revision notes.",
+  sameAs: [PORTFOLIO_URL, LINKEDIN_URL, X_URL],
 };
 
 const webSiteSchema = {

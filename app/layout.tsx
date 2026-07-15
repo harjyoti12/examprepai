@@ -14,10 +14,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const metadataBase =
-  process.env.NEXT_PUBLIC_APP_URL
-    ? new URL(process.env.NEXT_PUBLIC_APP_URL)
-    : new URL("http://localhost:3000");
+const metadataBase = new URL(process.env.NEXT_PUBLIC_APP_URL!);
 
 export const metadata: Metadata = {
   metadataBase,
@@ -98,9 +95,7 @@ export const metadata: Metadata = {
     description:
       "Turn your notes into exam-ready answers in seconds. Free to use.",
     images: ["/og-image.png"],
-    // TODO: Add your Twitter @handle when available
-    // site: "@examprepai",
-    // creator: "@examprepai",
+    site: "@herogaming7358",
   },
 
   ...(process.env.GOOGLE_SITE_VERIFICATION && {

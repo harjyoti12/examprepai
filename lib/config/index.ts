@@ -8,3 +8,4 @@ export {
 } from "./ai";
 export { CREDIT_RESET_DAYS } from "./limits";
 export { BUY_ME_A_COFFEE_URL, SUPPORT_EMAIL, RESEND_API_ENDPOINT } from "./urls";
+export { PORTFOLIO_URL, LINKEDIN_URL, X_URL } from "./social";

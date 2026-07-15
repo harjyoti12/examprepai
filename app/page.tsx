@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useUser, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
-import { BUY_ME_A_COFFEE_URL, SUPPORT_EMAIL } from "@/lib/config";
+import { BUY_ME_A_COFFEE_URL, SUPPORT_EMAIL, PORTFOLIO_URL, LINKEDIN_URL, X_URL } from "@/lib/config";
 
 /* ── 4-pointed sparkle SVG ── */
 function Sparkle({ size = 16, className = "" }: { size?: number; className?: string }) {
@@ -429,7 +429,7 @@ export default function LandingPage() {
 
             {/* ── Card 1 ── */}
             <AnimateOnScroll delay={0.15} className="w-full lg:flex-1">
-              <div className="how-card group relative flex h-full items-start gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/30 hover:bg-purple-500/[0.04] hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]">
+              <div className="group relative flex h-full items-start gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/30 hover:bg-purple-500/[0.04] hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]">
                 <div className="min-w-0 flex-1">
                   <span className="mb-3 block text-[2.5rem] font-extrabold leading-none text-white/10">01</span>
                   <h3 className="mb-2 text-[17px] font-bold text-white">Upload Notes</h3>
@@ -453,7 +453,7 @@ export default function LandingPage() {
 
             {/* ── Card 2 ── */}
             <AnimateOnScroll delay={0.3} className="w-full lg:flex-1">
-              <div className="how-card group relative flex h-full items-start gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/30 hover:bg-purple-500/[0.04] hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]">
+              <div className="group relative flex h-full items-start gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/30 hover:bg-purple-500/[0.04] hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]">
                 <div className="min-w-0 flex-1">
                   <span className="mb-3 block text-[2.5rem] font-extrabold leading-none text-white/10">02</span>
                   <h3 className="mb-2 text-[17px] font-bold text-white">AI Analyzes</h3>
@@ -477,7 +477,7 @@ export default function LandingPage() {
 
             {/* ── Card 3 ── */}
             <AnimateOnScroll delay={0.45} className="w-full lg:flex-1">
-              <div className="how-card group relative flex h-full items-start gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/30 hover:bg-purple-500/[0.04] hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]">
+              <div className="group relative flex h-full items-start gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/30 hover:bg-purple-500/[0.04] hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]">
                 <div className="min-w-0 flex-1">
                   <span className="mb-3 block text-[2.5rem] font-extrabold leading-none text-white/10">03</span>
                   <h3 className="mb-2 text-[17px] font-bold text-white">Get Answers</h3>
@@ -1145,16 +1145,14 @@ export default function LandingPage() {
               {/* Social Icons */}
               <div className="flex items-center gap-3">
                 {[
-                  { icon: Globe, label: "GitHub", href: "#" },        // TODO: Add real URL
-                  { icon: ExternalLink, label: "LinkedIn", href: "#" },// TODO: Add real URL
-                  { icon: TwitterIcon, label: "X (Twitter)", href: "#" },// TODO: Add real URL
+                  { icon: Globe, label: "Portfolio", href: PORTFOLIO_URL },
+                  { icon: ExternalLink, label: "LinkedIn", href: LINKEDIN_URL },
+                  { icon: TwitterIcon, label: "X", href: X_URL },
                   { icon: Mail, label: "Email", href: `mailto:${SUPPORT_EMAIL}` },
                 ].map(({ icon: Icon, label, href }) => (
                   <a
                     key={label}
                     href={href}
-                    target={href.startsWith("mailto") ? undefined : "_blank"}
-                    rel={href.startsWith("mailto") ? undefined : "noopener noreferrer"}
                     aria-label={label}
                     className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.02] text-gray-500 transition-all duration-200 hover:border-purple-500/30 hover:bg-purple-500/10 hover:text-purple-400"
                   >
@@ -1204,13 +1202,11 @@ export default function LandingPage() {
                   { label: "Privacy Policy", href: "/privacy" },
                   { label: "Terms of Service", href: "/terms" },
                   { label: "Contact", href: "/contact" },
-                  { label: "Feedback", href: "#" },        // TODO: Add feedback form/link
+                  { label: "Feedback", href: "/contact" },
                 ].map(({ label, href }) => (
                   <li key={label}>
                     <a
                       href={href}
-                      target={href.startsWith("mailto") ? undefined : "_blank"}
-                      rel={href.startsWith("mailto") ? undefined : "noopener noreferrer"}
                       className="text-[13.5px] text-gray-500 transition-colors duration-200 hover:text-purple-400"
                     >
                       {label}
@@ -1256,32 +1252,6 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* ── Global styles ── */}
-      <style jsx global>{`
-        /* Hide scrollbar */
-        html {
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-        }
-        html::-webkit-scrollbar {
-          display: none;
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-14px); }
-        }
-        @keyframes drift {
-          0%, 100% { transform: translate(0, 0); }
-          25% { transform: translate(4px, -6px); }
-          50% { transform: translate(-2px, -10px); }
-          75% { transform: translate(3px, -4px); }
-        }
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.4), 0 0 40px rgba(124, 58, 237, 0.15); }
-          50% { box-shadow: 0 0 30px rgba(124, 58, 237, 0.6), 0 0 60px rgba(124, 58, 237, 0.25); }
-        }
-      `}</style>
     </div>
   );
 }

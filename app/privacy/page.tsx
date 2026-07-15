@@ -5,6 +5,9 @@ import { BUY_ME_A_COFFEE_URL, SUPPORT_EMAIL } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Privacy Policy — ExamPrepAI",
   description: "Privacy Policy for ExamPrepAI. Learn how we collect, use, and protect your data.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 function Badge({ children }: { children: React.ReactNode }) {

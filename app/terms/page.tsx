@@ -5,6 +5,9 @@ import { SUPPORT_EMAIL } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Terms of Service — ExamPrepAI",
   description: "Terms of Service for ExamPrepAI. Read our terms and conditions.",
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 function Badge({ children }: { children: React.ReactNode }) {
