@@ -463,16 +463,18 @@ export default function DashboardHome() {
                   Upload Notes
                 </Button>
               </Link>
-              <Button variant="outline" className="btn-secondary-outline">
-                <div className="btn-play">
-                  <Play
-                    size={8}
-                    className="fill-violet-600 text-violet-600"
-                    stroke="none"
-                  />
-                </div>
-                How it Works
-              </Button>
+              <a href="https://youtu.be/KVHHEDiFjCc" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="btn-secondary-outline">
+                  <div className="btn-play">
+                    <Play
+                      size={8}
+                      className="fill-violet-600 text-violet-600"
+                      stroke="none"
+                    />
+                  </div>
+                  How it Works
+                </Button>
+              </a>
             </div>
 
             {/* Badges */}

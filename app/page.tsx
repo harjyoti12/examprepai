@@ -283,7 +283,9 @@ export default function LandingPage() {
                   </button>
                 </SignUpButton>
                 <a
-                  href="#how-it-works"
+                  href="https://youtu.be/KVHHEDiFjCc"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3 text-[14px] font-medium text-white hover:bg-white/10 transition-colors"
                 >
                   <div className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-600/80">
